@@ -20,9 +20,6 @@ pip install -r requirements.txt
 pip install -r dev-requirements.txt
 cd -
 
-# Fix postgres compat issue
-pip install psycopg2>=2.7
-
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
@@ -37,8 +34,17 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo "Installing ckanext-harvest and its requirements..."
+git clone https://github.com/ckan/ckanext-harvest
+cd ckanext-harvest
+python setup.py develop
+pip install -r pip-requirements.txt
+paster harvester initdb -c ../ckan/test-core.ini
+cd -
+
 echo "Installing ckanext-siu-harvester and its requirements..."
 python setup.py develop
+pip install -r requirements.txt
 pip install -r dev-requirements.txt
 
 echo "Moving test.ini into a subdir..."
