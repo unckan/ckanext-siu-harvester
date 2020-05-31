@@ -11,4 +11,5 @@ nosetests --ckan \
           --cover-package=ckanext.siu_harvester \
           --cover-inclusive \
           --cover-erase \
-          --cover-tests
+          --cover-tests \
+          ckanext/siu_harvester/tests
