@@ -18,6 +18,9 @@ pip install -r requirements.txt
 pip install -r dev-requirements.txt
 cd -
 
+# Fix postgres compat issue
+pip install psycopg2>=2.7
+
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
 sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'

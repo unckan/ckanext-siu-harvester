@@ -16,6 +16,15 @@ Estos datos se toman de la base SIU-Wichi, que contiene datos provenientes de lo
 pip install ckanext-siu-harvester
 ```
 
+### Agregar origen
+
+La URL los _harvest sources_ de este tipo son de la forma:
+```
+http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+```
+
+Debe elegir la URL de la instancia de la que desea obtener datos
+
 ### Configuración
 
 Para conectarse es requisito que para cada _harvest source_ definir una configuración.  
@@ -27,3 +36,37 @@ Ejemplo:
     "password": "password"    
 }
 ```
+
+### Datos a extraer
+
+Estos endpoints pueden incluir multiples recursos. Cada recurso es un _query_ al endpoint ya listo para usar.  
+Estos ya están configurados en el directorio `ckanext/siu_harvester/harvesters/siu_transp_data/queries/`
+
+Por ejemplo `egresados-pos-facultad.json`
+
+```
+{
+    "name": "distribucion-de-egresados-por-facultad",
+    "title": "Distribución de egresados por facultad",
+    "notes": "Esta es la cantidad de egresados por facultad de este año",
+    "iterables": {
+        "anio_param": "paramprm_ej_presup"
+    },
+    "tags": [
+        "Egresados"
+    ],
+    "params": {
+        "paramprm_ej_academ": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
+        "dataAccessId": "tablero_26",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D",
+        "paramsearchBox": null}
+ }
+```
+
+De esta forma este _harvester_ va a iterar por los años disponibles y creará un dataset para cada año.  
+Es posible agregar más _queries_ para consumir más datos.
+
