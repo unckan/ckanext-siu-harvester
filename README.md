@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/avdata99/ckanext-siu-harvester.svg?branch=master)](https://travis-ci.org/avdata99/ckanext-siu-harvester)
 # SIU Harvester
 Esta extensión de CKAN permite cosechar (_harvest_) datos expuestos en sistemas [SIU](https://www.siu.edu.ar/).  
 El **Sistema de Información Universitaria** es un [conjunto de aplicaciones](https://www.siu.edu.ar/como-obtengo-los-sistemas/) que permite de manera gratuita a las Universidades argentinas contar con las herramientas de software para su gestión integral.

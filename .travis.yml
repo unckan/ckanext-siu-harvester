@@ -4,10 +4,18 @@ python:
     - "2.7"
 services:
     - postgresql
-    - redis-server
+    - redis
 install:
     - bash bin/travis-build.bash
     - pip install coveralls
 script: sh bin/travis-run.sh
 after_success:
     - coveralls
+deploy:
+    provider: pypi
+    username: "$PYPI_USER"
+    password: "$PYPI_PASSWORD"
+    distributions: "sdist bdist_wheel"
+    on:
+        tags: true
+        python: 3.8
