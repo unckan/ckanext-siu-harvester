@@ -14,6 +14,12 @@ Estos datos se toman de la base SIU-Wichi, que contiene datos provenientes de lo
 
 ```
 pip install ckanext-siu-harvester
+or
+pip install -e git+https://github.com/avdata99/ckanext-siu-harvester.git#egg=ckanext-siu-harvester
+
+And
+pip install -r https://raw.githubusercontent.com/avdata99/ckanext-siu-harvester/master/requirements.txt
+
 ```
 
 ### Agregar origen
