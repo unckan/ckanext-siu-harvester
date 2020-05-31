@@ -1,0 +1,20 @@
+{
+    "name": "distribucion-de-gasto-por-inciso",
+    "title": "Distribución de gasto por inciso",
+    "notes": "Esta es la distribución de gastos por inciso",
+    "iterables": {
+        "anio_param": "paramprm_ej_presup"
+    },
+    "tags": [
+        "Presupuesto", "Gastos"
+    ],
+    "params": {
+        "paramprm_ej_presup": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda",
+        "dataAccessId": "tablero_05",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }

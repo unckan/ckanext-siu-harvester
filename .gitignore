@@ -42,3 +42,4 @@ coverage.xml
 docs/_build/
 
 ckanext/siu_harvester/harvesters/siu_transp_data/sample_urls.txt
+ckanext/siu_harvester/harvesters/siu_transp_data/results
