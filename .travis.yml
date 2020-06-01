@@ -1,5 +1,5 @@
 language: python
-sudo: required
+dist: xenial
 python:
 - '2.7'
 services:
@@ -19,4 +19,4 @@ deploy:
   distributions: sdist bdist_wheel
   on:
     python: 2.7
-    tags: true
+    branch: master
