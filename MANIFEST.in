@@ -1,6 +1,7 @@
 include README.rst
 include LICENSE
 include requirements.txt
-recursive-include ckanext/siu_harvester *.html *.json *.js *.less *.css *.mo
+recursive-include ckanext/siu_harvester *.html *.js *.less *.css *.mo
+recursive-include ckanext/siu_harvester/harvesters/siu_transp_data/queries *.json
 exclude ckanext/siu_harvester/harvesters/siu_transp_data/sample_urls.txt
-recursive-exclude ckanext/siu_harvester/harvesters/siu_transp_data/results
+prune ckanext/siu_harvester/harvesters/siu_transp_data/results
