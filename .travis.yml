@@ -16,7 +16,7 @@ deploy:
   username: "__token__"
   password:
     secure: lsmL0q6zpHTruZY5uTPqJZEDUNpKT/tsE25lWKeu1CUA51TdeMCGLGykRJEhyIJ5b32SiD6x86ykXBhmwFtm/Tm0tR93sGdIAhT7Lfk/G2Huyn+yMHyMx+ehhLxzJ82IBgH4osXvTtRfOH/+DbY2FVMCh0wAmsFxNy6KHH9wbnXrNnbz55YJ0FIlU9Od1lWTNwsJtfGCCm9eZBussNxLaHErKVO9mnRqXYC2lEf4HzttSMrMTuThdnitU7YYYVLHWxCVGhESXPjzPgYWM29fqTs9zP2tGzDG56ofrYRiP92Zp+N7SIaGy8Jd/i7HSOdA89OrLna+v4KyxaoBiau+B/rB5WMYHWYFBwCMdSAaAe42NrEjRx5idnSIVxrAvxwu/Qq3RoCKLxay6tm3ZdeoZqeMpYoxa9NwptjQJ+hMSfXIVRZw3Imgm3KhUOBps3Z2z9Eddt43tAWnRUAYX/THX31xaJdr3uwuPVM3UmMHjXz0RUxTADindAEHuKmtHOWBvkSzaC51X/WpkhltCvGREY4ZoDquO49rXQVmmA++Dfs3cLqfLUQreTsWxg0Cb1qGr1X5kuHtvbB19r3o2Fg50NoAJN6q75Aaj5D30PxwOrur45FWgm8wh/sxgR+m689amIxOU4EwYb8+TLn+9Lw9j7NE9ERIYkwMRsA0L8y2fBY=
-  distributions: sdist bdist_wheel
+  distributions: sdist
   on:
     python: 2.7
     branch: master
