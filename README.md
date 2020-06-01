@@ -12,6 +12,8 @@ Estos datos se toman de la base SIU-Wichi, que contiene datos provenientes de lo
 
 ### Instalacion
 
+Disponible en [Pypi](https://pypi.org/project/ckanext-siu-harvester/) o vía GitHub.  
+
 ```
 pip install ckanext-siu-harvester
 or
