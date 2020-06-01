@@ -48,10 +48,11 @@ pip install -r requirements.txt
 pip install -r dev-requirements.txt
 
 echo "Moving test.ini into a subdir..."
+# fix test path
+sed -i -e 's/\.\.\/src\/ckan\//\/ckan\//' test.ini
+
 mkdir subdir
 mv test.ini subdir
 
-# fix test path
-sed -i -e 's/\.\.\/src\/ckan\//\/ckan\//' test.ini
 
 echo "travis-build.bash is done."
