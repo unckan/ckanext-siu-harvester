@@ -51,4 +51,7 @@ echo "Moving test.ini into a subdir..."
 mkdir subdir
 mv test.ini subdir
 
+# fix test path
+sed -i -e 's/\.\.\/src\/ckan\//\/ckan\//' test.ini
+
 echo "travis-build.bash is done."
