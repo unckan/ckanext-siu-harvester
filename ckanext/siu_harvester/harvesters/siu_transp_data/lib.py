@@ -124,8 +124,14 @@ class SIUTranspQueryFile:
             logger.error(error)
             self.errors.append(error)
             return None
-            
-        data = resp.json()
+        
+        try:
+            data = resp.json()
+        except Exception, e:
+            error = 'JSON error. Response: {}\n\tURL: {}\n\tParams: {}\n\tError: {}'.format(resp.text, base_url, params, e)
+            logger.error(error)
+            self.errors.append(error)
+            return None
         return data
     
     def get_metadata(self):
