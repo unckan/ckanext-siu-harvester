@@ -6,7 +6,7 @@ echo "This is travis-build.bash..."
 echo "Installing the packages that CKAN requires..."
 sudo add-apt-repository ppa:chris-lea/redis-server
 sudo apt-get update -qq
-sudo apt-get install solr-jetty redis-server
+sudo apt-get -y install solr-jetty redis-server
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
