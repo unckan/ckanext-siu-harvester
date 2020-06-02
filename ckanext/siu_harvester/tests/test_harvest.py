@@ -116,17 +116,15 @@ class TestSIUHarvester:
 
         assert len(all_objects) == 14
 
-        reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
-        queue.fetch_callback(consumer_fetch, *reply)
-        reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
-        queue.fetch_callback(consumer_fetch, *reply)
-        reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
-        queue.fetch_callback(consumer_fetch, *reply)
+        for r in range(0, 14):
+            reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
+            queue.fetch_callback(consumer_fetch, *reply)
+        
 
         count = model.Session.query(model.Package) \
             .filter(model.Package.type == 'dataset') \
             .count()
-        assert count == 3
+        assert count == 14
 
         all_objects = model.Session.query(HarvestObject).filter_by(report_status='added').all()
         assert len(all_objects) == 14
