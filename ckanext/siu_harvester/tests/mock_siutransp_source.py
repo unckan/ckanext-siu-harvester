@@ -9,7 +9,7 @@ import SocketServer
 from threading import Thread
 
 log = logging.getLogger("harvester")
-PORT = 8973
+PORT = 8971
 
 class MockRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 

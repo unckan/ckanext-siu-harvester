@@ -114,13 +114,13 @@ class TestSIUHarvester:
 
         all_objects = model.Session.query(HarvestObject).all()
 
-        assert len(all_objects) == 14
+        log.info('all_objects {}: {}'.format(len(all_objects), all_objects))
+        assert len(all_objects) == 7
 
-        for r in range(0, 14):
+        for r in range(0, 7):
             reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
             queue.fetch_callback(consumer_fetch, *reply)
         
-
         count = model.Session.query(model.Package) \
             .filter(model.Package.type == 'dataset') \
             .count()
