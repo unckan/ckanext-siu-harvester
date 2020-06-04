@@ -1,0 +1,10 @@
+
+{
+  "queryInfo":{"totalRows":"0"},
+  "resultset":[],
+  "metadata":[
+    {"colIndex":0,"colType":"String","colName":"dependencia"},
+    {"colIndex":1,"colType":"Numeric","colName":"cant_egresados"},
+    {"colIndex":2,"colType":"Numeric","colName":"porcentaje"}
+  ]
+}

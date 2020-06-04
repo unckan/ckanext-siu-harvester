@@ -3,7 +3,7 @@
     "title": "Distribución de egresados por facultad",
     "notes": "Esta es la cantidad de egresados por facultad de este año",
     "iterables": {
-        "anio_param": "paramprm_ej_presup"
+        "anio_param": "paramprm_ej_academ"
     },
     "tags": [
         "Egresados"

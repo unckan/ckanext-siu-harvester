@@ -25,11 +25,11 @@ class SIUTransparenciaHarvester(HarvesterBase):
         here = os.path.dirname(os.path.abspath(__file__))
         base = os.environ.get('CKAN_STORAGE_PATH', here)
         self.data_path = os.path.join(base, 'siu_transp_data')
-        self.queries_path = os.path.join(self.data_path, 'queries')
+        self.queries_path = os.path.join(here, 'siu_transp_data', 'queries')
         self.results_path = os.path.join(self.data_path, 'results')
         if not os.path.isdir(self.results_path):
-            os.mkdir(self.results_path)
-
+            os.makedirs(self.results_path)
+        
     ## IHarvester
     def info(self):
         '''

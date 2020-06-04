@@ -124,8 +124,14 @@ class SIUTranspQueryFile:
             logger.error(error)
             self.errors.append(error)
             return None
-            
-        data = resp.json()
+        
+        try:
+            data = resp.json()
+        except Exception, e:
+            error = 'JSON error. Response: {}\n\tURL: {}\n\tParams: {}\n\tError: {}'.format(resp.text, base_url, params, e)
+            logger.error(error)
+            self.errors.append(error)
+            return None
         return data
     
     def get_metadata(self):
@@ -253,21 +259,3 @@ class SIUTranspQueryFile:
     
     def build_tags(self, tags):
         return [{'name': tag} for tag in tags] 
-
-data_sample = {
-    "queryInfo": {"totalRows": "5"}, 
-    "resultset": [
-        ["5 - TRANSFERENCIAS", 394565, 0.78], 
-        ["4 - BIENES DE USO", 18801654.11, 37.16], 
-        ["3 - SERVICIOS NO PERSONALES", 27873452.41, 55.09], 
-        ["2 - BIENES DE CONSUMO", 3521613.99, 6.96], 
-        ["1 - GASTOS EN PERSONAL", 1946.47, 0]
-    ], 
-    "metadata": [
-        {"colType": "String", "colIndex": 0, "colName": "inciso"}, 
-        {"colType": "Numeric", "colIndex": 1, "colName": "total_devengado"}, 
-        {"colType": "Numeric", "colIndex": 2, "colName": "porcentaje"}
-    ]
-}
-        
-

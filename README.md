@@ -16,10 +16,10 @@ Disponible en [Pypi](https://pypi.org/project/ckanext-siu-harvester/) o vía Git
 
 ```
 pip install ckanext-siu-harvester
-or
+ó
 pip install -e git+https://github.com/avdata99/ckanext-siu-harvester.git#egg=ckanext-siu-harvester
 
-And
++
 pip install -r https://raw.githubusercontent.com/avdata99/ckanext-siu-harvester/master/requirements.txt
 
 ```

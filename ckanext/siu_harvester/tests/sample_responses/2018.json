@@ -1,0 +1,15 @@
+
+{
+  "queryInfo":{"totalRows":"4"},
+  "resultset":[
+    ["Derecho",47,47.0],
+    ["Izquierdo",3,3.0],
+    ["Humanisticas",46,46.0],
+    ["Inhumanas",4,4.0]
+  ],
+  "metadata":[
+    {"colIndex":0,"colType":"String","colName":"dependencia"},
+    {"colIndex":1,"colType":"Numeric","colName":"cant_egresados"},
+    {"colIndex":2,"colType":"Numeric","colName":"porcentaje"}
+  ]
+}
