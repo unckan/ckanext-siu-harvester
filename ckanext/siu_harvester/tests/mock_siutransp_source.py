@@ -9,7 +9,7 @@ import SocketServer
 from threading import Thread
 
 log = logging.getLogger("harvester")
-PORT = 8971
+PORT = 8952
 
 class MockRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
@@ -51,13 +51,12 @@ class MockRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         elif anio == '500':
             self.test_name = 'e500'
             self.respond('Error', status=500)
+        else:
+            self.respond('Mock DataJSON doesnt recognize that call', status=400)
 
         if self.sample_json_file is not None:
             log.info('return json file {}'.format(self.sample_json_file))
             self.respond_json_sample_file(file_path=self.sample_json_file)
-
-        if self.test_name is None:
-            self.respond('Mock DataJSON doesnt recognize that call', status=400)
 
     def respond_json(self, content_dict, status=200):
         return self.respond(json.dumps(content_dict), status=status,

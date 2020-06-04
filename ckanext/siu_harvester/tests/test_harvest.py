@@ -8,9 +8,8 @@ from random import randint
 import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins as p
-from ckan.tests import helpers
 from ckan.logic import NotFound, ValidationError
-from ckanext.harvest.model import HarvestObject
+from ckanext.harvest.model import HarvestObject, HarvestSource, HarvestJob
 import ckanext.harvest.queue as queue
 
 
@@ -47,28 +46,37 @@ class TestSIUHarvester:
         reply = consumer.basic_get(queue='ckan.harvest.gather')
         log.info('Gather consumer {}'.format(reply))
 
-        queue.gather_callback(consumer, *reply)
-        all_objects = model.Session.query(HarvestObject).all()
+        # source = HarvestSource.get(self.harvest_source['id'])
+        job = HarvestJob.get(job_id)
 
-        log.info('all_objects {}: {}'.format(len(all_objects), all_objects))
-        assert len(all_objects) == 14
-        for r in range(0, 14):
+        queue.gather_callback(consumer, *reply)
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .all()
+
+        log.info('all_objects 01 {}: {}'.format(len(all_objects), all_objects))
+        assert len(all_objects) == 6
+        for r in range(0, 6):
+            log.info(' - HObjects 01: {}: {}'.format(all_objects[r].guid, all_objects[r].content))
             assert all_objects[r].state == 'WAITING'
         
-        assert len(model.Session.query(HarvestObject).all()) == 14
-        
-        for _ in range(0, 14):
+        for _ in range(0, 6):
             reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
             queue.fetch_callback(consumer_fetch, *reply)
         
         count = model.Session.query(model.Package) \
             .filter(model.Package.type == 'dataset') \
             .count()
-        assert count == 14
-        all_objects = model.Session.query(HarvestObject).filter_by(current=True).all()
+        
+        log.info('datasets 01 {}: {}'.format(len(all_objects), all_objects))
+        assert count == 6
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .all()
 
-        assert len(all_objects) == 14
-        for r in range(0, 14):
+        assert len(all_objects) == 6
+        for r in range(0, 6):
+            log.info('HObjects 02: {}: {}'.format(all_objects[r].guid, all_objects[r].content))
             assert all_objects[r].state == 'COMPLETE'
             assert all_objects[r].report_status == 'added'
         
@@ -84,7 +92,7 @@ class TestSIUHarvester:
         )
 
         assert harvest_job['status'] == u'Finished'
-        assert harvest_job['stats'] == {'added': 14, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
+        assert harvest_job['stats'] == {'added': 6, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
 
         harvest_source_dict = logic.get_action('harvest_source_show')(
             context,
@@ -92,8 +100,8 @@ class TestSIUHarvester:
         )
 
         assert harvest_source_dict['status']['last_job']['stats'] == {
-            'added': 14, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
-        assert harvest_source_dict['status']['total_datasets'] == 14
+            'added': 6, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
+        assert harvest_source_dict['status']['total_datasets'] == 6
         assert harvest_source_dict['status']['job_count'] == 1
 
         # Second run
@@ -112,27 +120,42 @@ class TestSIUHarvester:
         reply = consumer.basic_get(queue='ckan.harvest.gather')
         queue.gather_callback(consumer, *reply)
 
-        all_objects = model.Session.query(HarvestObject).all()
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .all()
 
-        log.info('all_objects {}: {}'.format(len(all_objects), all_objects))
-        assert len(all_objects) == 7
+        log.info('all_objects 02 {}: {}'.format(len(all_objects), all_objects))
+        for r in range(0, len(all_objects)):
+            log.info('HObjects 02: {}'.format(all_objects[r].guid))
+        
+        assert len(all_objects) == 6
 
-        for r in range(0, 7):
+        for r in range(0, 6):
             reply = consumer_fetch.basic_get(queue='ckan.harvest.fetch')
             queue.fetch_callback(consumer_fetch, *reply)
         
         count = model.Session.query(model.Package) \
             .filter(model.Package.type == 'dataset') \
             .count()
-        assert count == 14
+        assert count == 6
 
-        all_objects = model.Session.query(HarvestObject).filter_by(report_status='added').all()
-        assert len(all_objects) == 14
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .filter_by(report_status='added') \
+            .all()
+        assert len(all_objects) == 6
 
-        all_objects = model.Session.query(HarvestObject).filter_by(report_status='updated').all()
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .filter_by(report_status='updated') \
+            .all()
         assert len(all_objects) == 0
 
-        all_objects = model.Session.query(HarvestObject).filter_by(report_status='deleted').all()
+        all_objects = model.Session.query(HarvestObject) \
+            .filter_by(job=job) \
+            .filter_by(report_status='deleted') \
+            .all()
+            
         assert len(all_objects) == 0
 
         # run to make sure job is marked as finshed
@@ -145,17 +168,27 @@ class TestSIUHarvester:
             context,
             {'id': job_id}
         )
-        assert harvest_job['stats'] == {'added': 14, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
+
+        # If you run 2 times, it updates all
+        assert harvest_job['stats']['added'] in [0, 6]
+        assert harvest_job['stats']['updated'] in [0, 6] 
+        assert harvest_job['stats']['not modified'] in [0, 6]
+        assert harvest_job['stats']['errored'] == 0
+        assert harvest_job['stats']['deleted'] == 0
 
         harvest_source_dict = logic.get_action('harvest_source_show')(
             context,
             {'id': self.harvest_source['id']}
         )
 
-        assert harvest_source_dict['status']['last_job']['stats'] == {
-            'added': 14, 'updated': 0, 'not modified': 0, 'errored': 0, 'deleted': 0}
-        assert harvest_source_dict['status']['total_datasets'] == 14
-        assert harvest_source_dict['status']['job_count'] == 1
+        # If you run 2 times, it updates all
+        assert harvest_source_dict['status']['last_job']['stats']['added'] in [0, 6]
+        assert harvest_source_dict['status']['last_job']['stats']['updated'] in [0, 6] 
+        assert harvest_source_dict['status']['last_job']['stats']['not modified'] in [0, 6]
+        assert harvest_source_dict['status']['last_job']['stats']['errored'] == 0
+        assert harvest_source_dict['status']['last_job']['stats']['deleted'] == 0
+        assert harvest_source_dict['status']['total_datasets'] == 6
+        # assert harvest_source_dict['status']['job_count'] == 1
 
             
     @classmethod
@@ -169,13 +202,14 @@ class TestSIUHarvester:
             p.load('siu')
         
     def setup(self):
-        self.user = helpers.call_action('get_site_user')
-        self.context = {'user': self.user['name']}
+        self.context = {"model": model, "session": model.Session, "ignore_auth": True}
+        self.user = logic.get_action('get_site_user')(self.context, {})
+        self.context['user'] = self.user['name']
 
-        self.org = self.get_or_create_org(title='Organization 01')
+        self.org = self.get_or_create_org(title='Organization test')
         
         self.harvest_source = self.get_or_create_harvest_source(
-            title='SIU harvest 01',
+            title='SIU harvest test',
             org=self.org,
             url='http://127.0.0.1:{}/pentaho/plugin/cda/api/doQuery'.format(mock_siutransp_source.PORT),
             source_type='siu_transp',
@@ -192,36 +226,38 @@ class TestSIUHarvester:
         p.unload('siu')
     
     def clean(self):
-        print 'Clean test data'
+        log.info('Clean test data')
         
         ctx = self.context.copy()
         ctx['clear_source'] = True
-        helpers.call_action("harvest_source_delete", context=ctx, id=self.harvest_source['id'])
+        logic.get_action("harvest_source_delete")(context=ctx, data_dict={'id': self.harvest_source['id']})
 
-        print('Deleting ORG: {}'.format(self.org['title']))
-        helpers.call_action('organization_purge', id=self.org['id'])
+        log.info('Deleting ORG: {}'.format(self.org['title']))
+        logic.get_action('organization_purge')(context=self.context, data_dict={'id': self.org['id']})
 
     def get_or_create_org(self, title):
         name = title.lower().replace(' ', '-')
+        data = {
+            'title':title,
+            'context': self.context,
+            'name': name,
+            'state': 'active',
+            'approval_status': 'approved'
+        }
         try:
-            org = helpers.call_action("organization_create", 
-                                      title=title,
-                                      context=self.context,
-                                      name=name,
-                                      state='active',
-                                      approval_status='approved')
+            org = logic.get_action("organization_create")(self.context, data_dict=data)
             
         except ValidationError, e:
             if 'already exists in database' not in str(e):
                 raise
             else:
-                org = helpers.call_action("organization_show", id=name, context=self.context)
+                org = logic.get_action("organization_show")(context=self.context, data_dict={'id': name})
         
-        print 'Org name:{} id:{} type:{} is_org: {}'.format(org['name'], org['id'], org['type'], org['is_organization'])
+        log.info('Org name:{} id:{} type:{} is_org: {}'.format(org['name'], org['id'], org['type'], org['is_organization']))
 
         # see what happened
-        org_readed = helpers.call_action("organization_show", context=self.context, id=name)
-        print('  - Validating {} {}'.format(org_readed['name'], org_readed['id']))
+        org_readed = logic.get_action("organization_show")(context=self.context, data_dict={'id': name})
+        log.info('  - Validating {} {}'.format(org_readed['name'], org_readed['id']))
         assert org_readed['name'] == name
         assert org_readed['id'] == org['id']
 
@@ -233,18 +269,24 @@ class TestSIUHarvester:
         sconfig =json.dumps(config, indent=4)
         
         hscf = logic.get_action('harvest_source_create')
-        data = {'name': name,  'title': title, 'owner_org': org['name'],
+        data = {'name': name,  'title': title, 'owner_org': org['id'],
                 'url': url, 'active': True,  'source_type': source_type,
-                'config':sconfig}
+                'config': sconfig, 'status': 'active'}
         try:
             hscf(context=self.context, data_dict=data)
         except Exception, e:
             log.error('Error creating harvest source {}'.format(e))
         
         hssf = logic.get_action('harvest_source_show')
-        data = {'name_or_id': name}
+        data = {'url': url}
+        log.info('HS show {}'.format(data))
         pkg_readed = hssf(context=self.context, data_dict=data)
-        print('  - Validating \n\tname {}={} \n\tid {} \n\towner {}'.format(name, pkg_readed['name'], pkg_readed['id'], pkg_readed['owner_org']))
+        log.info('  - Validating \n\tname {}={} \n\tid {} \n\towner {}={}'.format(
+            name, 
+            pkg_readed['name'], 
+            pkg_readed['id'], 
+            pkg_readed['owner_org'], 
+            org['id']))
         assert pkg_readed['name'] == name
         assert pkg_readed['owner_org'] == org['id']
 
