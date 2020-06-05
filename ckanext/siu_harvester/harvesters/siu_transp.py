@@ -210,7 +210,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             # TODO debería poder agregarse desde resource_create pero parece que no se puede
             user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
             api_key = user_harvest['apikey']
-            requests.post('http://0.0.0.0:5000/api/action/resource_update',
+            requests.post('http://ckan:5000/api/action/resource_update',
                 data={'id':resource['id']},
                 headers={'X-CKAN-API-Key': api_key},
                 files=[('upload', file(upload))])
