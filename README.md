@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/avdata99/ckanext-siu-harvester.svg?branch=master)](https://travis-ci.org/avdata99/ckanext-siu-harvester)
-
 [![Docker Pulls](https://img.shields.io/docker/pulls/avdata99/ckan-env.svg)](https://hub.docker.com/r/avdata99/ckan-env/tags)
 [![Docker Automated](https://img.shields.io/docker/automated/avdata99/ckan-env.svg)](https://hub.docker.com/r/avdata99/ckan-env/tags)
 [![](https://img.shields.io/pypi/implementation/ckanext-siu-harvester)](https://pypi.org/project/ckanext-siu-harvester/)
