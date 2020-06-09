@@ -1,0 +1,21 @@
+{
+    "name": "comprado-por-ejercicio",
+    "title": "Evolución del total comprado por ejercicio",
+    "notes": "",
+    "internals": "Describir mejor",
+    "iterables": {
+        "anio_param": "paramprm_ej_compras"
+    },
+    "tags": [
+        "Compras", "Gastos"
+    ],
+    "params": {
+        "paramprm_ej_compras": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/2_compras.cda",
+        "dataAccessId": "tablero_07",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }
