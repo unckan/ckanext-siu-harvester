@@ -2,7 +2,7 @@
     "name": "distribucion-de-gasto-por-inciso",
     "title": "Distribución de gasto por inciso",
     "notes": "Esta es la distribución de gastos por inciso",
-    "internals": "Al parecer esta relacionado con el presupuesto, quizas requira más estudio",
+    "internals": "Al parecer esta relacionado con el presupuesto, quizas requiera más estudio",
     "iterables": {
         "anio_param": "paramprm_ej_presup"
     },

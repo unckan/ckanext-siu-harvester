@@ -2,6 +2,41 @@
 
 Estas consultas no están cargadas al sistema todavía
 
+## Resumen final
+
+path: /home/SIU-Wichi/Portal Transparencia/cda/0_configuracion.cda
+
+path                dataAccessId        extra param                 Obs                 
+0_configuracion.cda fecha_actualizacion                             Fecha actualizacion 
+1_presupuesto.cda   param_anios_presup  paramprm_tablero_visible:1  Lista de años con presupuesto
+1_presupuesto.cda   tablero_01          paramprm_ej_presup: 2015    Gastos por fuente de financiamiento
+1_presupuesto.cda   tablero_02                                      Evolución del crédito por ejercicio y fuente .. 
+1_presupuesto.cda   tablero_03                                      Evolución del gasto por ejercicio
+1_presupuesto.cda   tablero_04          paramprm_ej_presup: 2016    Distribución de gasto por dependencia 
+1_presupuesto.cda   tablero_05          paramprm_ej_presup: 2020    Gasto por incido
+        
+
+  paramprm_ej_academ: 2016
+  paramprm_nivel_academ: 1-TODOS
+  path: /home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda
+  dataAccessId: tablero_211
+  outputIndexId: 1
+  pageSize: 0
+  pageStart: 0
+  sortBy: 2D
+
+
+  Lista de los niveles académicos disponibles
+  {"queryInfo":{"totalRows":"4"},"resultset":[["1-TODOS"],["Grado"],["Posgrado"],["Pregrado"]],"metadata":[{"colIndex":0,"colType":"String","colName":"?column?"}]}
+
+  path: /home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda
+  dataAccessId: param_nivel_academ
+  paramprm_tablero_visible: 211
+  outputIndexId: 1
+  pageSize: 0
+  pageStart: 0
+  sortBy: 
+  paramsearchBox: 
 ## En el código
 
 Se peude ver esta lista
@@ -64,13 +99,6 @@ Fecha de actualziacion (asumimos que es la del portal)
       {"queryInfo":{"totalRows":"15"},"resultset":[[2016],[2015],[2014],[2013],[2012],[2011],[2010],[2009],[2008],[2007],[2006],[2005],[2004],[2003],[2002]],"metadata":[{"colIndex":0,"colType":"Integer","colName":"anio"}]}
       outputIndexId: 1 pageSize: 0 pageStart: 0 sortBy: paramsearchBox: 
 
-### Gastos por fuente de financiamiento
-
- - path: /home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda
-   - dataAccessId: tablero_01
-   - {"queryInfo":{"totalRows":"3"},"resultset":[["TESORO NACIONAL",1043455131.19,90.44],["REMANENTES EJERCICIOS ANTERIORES",40559927.01,3.52],["RECURSOS PROPIOS",69762037.29,6.05]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}
-    paramprm_ej_presup: 2015 outputIndexId: 1 pageSize: 0 pageStart: 0 sortBy:  paramsearchBox: 
-
 ### Evolución del crédito por ejercicio y fuente de financiamiento 
 
  - path: /home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda
@@ -89,9 +117,34 @@ outputIndexId: 1 pageSize: 0 pageStart: 0 sortBy:
 
  - path: /home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda
    - paramprm_ej_presup: 2016
-   - dataAccessId: tablero_04
+   - dataAccessId: /home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda
 outputIndexId: 1 pageSize: 0 pageStart: 0 sortBy: 2D
 
 "queryInfo":{"totalRows":"12"},"resultset":[["RECTORADO",157494120.05,38.69],["EXACTAS Y NATURALES",36363000.16,8.93],["VETERINARIAS Y SALUD ANIMAL",36176162.24,8.89],["HUMANISTICAS",35849340.58,8.81],["INGENIERIA",32738158.37,8.04],["ADMINISTRACION Y ECONOMIA",27851765.6,6.84],["AGRARIAS Y FORESTALES",25515479.55,6.27],["PERIODISMO",16728428.52,4.11],["CINE Y TV",16071479.8,3.95],["MEDICINA",12325299.99,3.03],["DERECHO Y SOCIALES",9232234.93,2.27],["INSTITUTO DE INVESTIGACION",721712.85,0.18]],"metadata":[{"colIndex":0,"colType":"String","colName":"dependencia"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}
 
 
+## Academico
+
+  {"queryInfo":{"totalRows":"11"},"resultset":[["HUMANISTICAS",9051,22.89],["ADMINISTRACION Y ECONOMIA",6552,16.57],["EXACTAS Y NATURALES",5802,14.67],["VETERINARIAS Y SALUD ANIMAL",5184,13.11],["INGENIERIA",3087,7.81],["DERECHO Y SOCIALES",2622,6.63],["AGRARIAS Y FORESTALES",2208,5.58],["PERIODISMO",1791,4.53],["CINE Y TV",1737,4.39],["MEDICINA",1401,3.54],["INSTITUTO DE INVESTIGACION",114,0.29]],"metadata":[{"colIndex":0,"colType":"String","colName":"dependencia"},{"colIndex":1,"colType":"Numeric","colName":"total_alumnos"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}
+
+  paramprm_ej_academ: 2016
+  paramprm_nivel_academ: 1-TODOS
+  path: /home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda
+  dataAccessId: tablero_211
+  outputIndexId: 1
+  pageSize: 0
+  pageStart: 0
+  sortBy: 2D
+
+
+  Lista de los niveles académicos disponibles
+  {"queryInfo":{"totalRows":"4"},"resultset":[["1-TODOS"],["Grado"],["Posgrado"],["Pregrado"]],"metadata":[{"colIndex":0,"colType":"String","colName":"?column?"}]}
+
+  path: /home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda
+  dataAccessId: param_nivel_academ
+  paramprm_tablero_visible: 211
+  outputIndexId: 1
+  pageSize: 0
+  pageStart: 0
+  sortBy: 
+  paramsearchBox: 

@@ -82,8 +82,8 @@ class SIUTranspQueryFile:
             if self.data_is_empty(data):
                 logger.info('Dataset vacío: {}'.format(self.params['name']))
                 return
-            title = self.params['title']
-            notes = self.params['notes']
+            title = self.params['title'].encode('utf-8')
+            notes = self.params['notes'].encode('utf-8')
                     
             full = {
                 'name': self.params['name'],
