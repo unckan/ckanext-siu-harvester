@@ -2,6 +2,47 @@
 
 Estas consultas no están cargadas al sistema todavía
 
+## En el código
+
+Se peude ver esta lista
+
+```
+// PRESUPUESTO
+'1': 'Gastos por fuentes de financiamiento',
+'2': 'Evolución del crédito por ejercicio y fuente de financiamiento',
+'3': 'Evolución del gasto por ejercicio',
+'4': 'Distribución de gasto por dependencia',
+'5': 'Distribución de gasto por inciso',
+// COMPRAS
+'6': 'Evolución del total comprado por ejercicio',
+'7': 'Total comprado por dependencia',
+'8': 'Top 10 de proveedores adjudicados por monto',
+'9': 'Top 1 de proveedores adjudicados por rubro',
+'10': 'Total de compras por rubro',
+// PATRIMONIO
+'11': 'Altas patrimoniales por dependencia',
+'12': 'Valuación patrimonial por dependencia',
+'13': 'Evolución de valuación patrimonial',
+'14': 'Altas patrimoniales por partida parcial',
+'15': 'Valuación patrimonial por partida parcial',
+// RR. HH.
+'16': 'Distribución de cargos activos por escalafón',
+'17': 'Distribución de cargos activos por dependencia',
+'18': 'Evolución de cargos activos por escalafón',
+'19': 'Evolución de cargos activos por dependencia',
+'20': 'Evolución de cargos activos por género',
+// ACADEMICA
+'21': 'Evolución de alumnos por año',
+'211': 'Distribución de alumnos por facultad',
+'22': 'Distribución de alumnos por carrera en el año',
+'23': 'Evolución de ingresantes por año',
+'24': 'Distribución de nuevos ingresantes por facultad',
+'241': 'Distribución de nuevos ingresantes por carrera',
+'25': 'Evolución de egresados por año',
+'26': 'Distribución de egresados por facultad',
+'261': 'Distribución de egresados por carrera' 
+```
+
 ## Configuracion
 
 Fecha de actualziacion (asumimos que es la del portal)
