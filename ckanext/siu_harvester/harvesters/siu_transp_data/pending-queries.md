@@ -7,18 +7,6 @@ Estas consultas no están cargadas al sistema todavía
 Se peude ver esta lista
 
 ```
-// COMPRAS
-'6': 'Evolución del total comprado por ejercicio',
-'7': 'Total comprado por dependencia',
-'8': 'Top 10 de proveedores adjudicados por monto',
-'9': 'Top 1 de proveedores adjudicados por rubro',
-'10': 'Total de compras por rubro',
-// PATRIMONIO
-'11': 'Altas patrimoniales por dependencia',
-'12': 'Valuación patrimonial por dependencia',
-'13': 'Evolución de valuación patrimonial',
-'14': 'Altas patrimoniales por partida parcial',
-'15': 'Valuación patrimonial por partida parcial',
 // RR. HH.
 '16': 'Distribución de cargos activos por escalafón',
 '17': 'Distribución de cargos activos por dependencia',
