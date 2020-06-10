@@ -58,7 +58,7 @@ class SIUTranspQueryFile:
         
         if 'iterables' in self.params:
             if "anio_param" in self.params['iterables']:
-                anios = range(2020, 2009, -1)  # TODO, definir otra forma más dinámica
+                anios = range(2020, 1979, -1)  # TODO, definir otra forma más dinámica
                 for anio in anios:
                     # definir un nombre personalizado para cada recurso
                     data = self.harvest(anio=anio)
@@ -190,7 +190,7 @@ class SIUTranspQueryFile:
             is_empty = True
 
         return is_empty
-        
+
     def save_metadata(self):
         """ grabar los metadatos (personalizados, el harvester ya guarda algunos) de este proceso de cosecha """
         data_str = json.dumps(self.metadata, indent=4)
