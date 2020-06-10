@@ -1,0 +1,21 @@
+{
+    "name": "top-proveedores-por-monto",
+    "title": "Top 10 de proveedores adjudicados por monto",
+    "notes": "",
+    "internals": "Describir mejor",
+    "iterables": {
+        "anio_param": "paramprm_ej_compras"
+    },
+    "tags": [
+        "Compras", "Gastos", "Proveedores"
+    ],
+    "params": {
+        "paramprm_ej_compras": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/2_compras.cda",
+        "dataAccessId": "tablero_08",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }
