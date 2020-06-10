@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import requests
-
+from slugify import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -58,25 +58,10 @@ class SIUTranspQueryFile:
         
         if 'iterables' in self.params:
             if "anio_param" in self.params['iterables']:
-                anios = range(2020, 1979, -1)  # TODO, definir otra forma más dinámica
-                for anio in anios:
-                    # definir un nombre personalizado para cada recurso
-                    data = self.harvest(anio=anio)
-                    if self.data_is_empty(data):
-                        logger.info('Dataset vacío: {} {}'.format(self.params['name'], anio))
-                        continue
-                    title = self.params['title'].encode('utf-8')
-                    notes = self.params['notes'].encode('utf-8')
-                    full = {
-                        'name': '{}-{}'.format(self.params['name'], anio),
-                        'title': '{} {}'.format(title, anio),
-                        'notes': notes,
-                        'data': data,
-                        'tags': self.build_tags(tags=self.params.get('tags', []))
-                    }
-                    full['resources'] = self.save_data(full)
-                    self.datasets.append(full)
-
+                self.iterate_anios()
+            elif "sub_list" in self.params['iterables']:
+                sub_list = self.params['iterables']['sub_list']
+                self.iterate_sublist(sub_list=sub_list)
         else:
             data = self.harvest()
             if self.data_is_empty(data):
@@ -94,17 +79,116 @@ class SIUTranspQueryFile:
             }
             full['resources'] = self.save_data(full)
             self.datasets.append(full)
-
-    def request_data(self, anio=None):
-        """ consultar la URL con los parámetros definidos y devolver el resultado """
         
-        if len(self.params.keys()) == 0:
+    def iterate_sublist(self, sub_list={}):
+        """ Iterar por una sub-lista de una query que lo requiere
+            Esta funcion carga sel.datasets con todos los datos 
+                encontrados que no estén vacios.
+            La sublista debe ser definida de la forma
+            {
+                "help": "No requerido pero util para documentar",
+                "name": "lala",
+                "params": {
+                    "paramprm_tablero_visible": "18",
+                    "dataAccessId": "param_ua_cargos"
+                    }
+            }
+            """
+        name = sub_list['name']
+        logger.info('Iterando sublista: {}'.format(name))
+        # agregar los nuevos parámetros para la sublista tomando como base la lista original del archivo JSON.
+        params = self.params['params'].copy()
+        # pisar con los valores requeridos para la sub lista
+        params.update(sub_list['params'])
+        # quitar el parametro que despues se va a aplicar
+        apply_to = sub_list['apply_to']
+        del params[apply_to]
+        sub_list['params'] = params
+        data = self.request_data(query=sub_list)
+        # aca recibimos un JSON como en los datasets.
+        # interpretamos que resultset tendrá una lista de los valores que buscamos
+        elementos = data['resultset']
+
+        # estos valores deben ser pasados al parametro definido en 'apply_to'
+        apply_to = sub_list['apply_to']
+
+        for elem in elementos:
+            # aqui esperamos una lista de un solo elemento
+            value = elem[0]
+            logger.info('Buscando datos para la sublista: {}'.format(value))
+            # ahora estoy listo para la cosecha de los datos
+            # cada valor obtenido debe pasarse al campo definido en 'apply_to'
+            # y cosecharse
+            self.params['params'][apply_to] = value
+
+            data = self.harvest()
+            if self.data_is_empty(data):
+                logger.info('Dataset vacío: {} {}'.format(name, value))
+                continue
+            logger.info('Datos obtenidos para: {}'.format(value))
+            title = self.params['title'].encode('utf-8')
+            notes = self.params['notes'].encode('utf-8')
+            
+            # TODO analizar como transformar algunos valores no válidos 
+            # para ser usados como nombres
+            if value == '1-TODAS':
+                name_value = 'completo'
+                title_value = 'Completo'
+            else:
+                name_value = slugify(value)
+                title_value = value
+                
+            full = {
+                'name': '{}-{}'.format(self.params['name'], name_value),
+                'title': '{} {}'.format(title, title_value),
+                'notes': notes,
+                'data': data,
+                'tags': self.build_tags(tags=self.params.get('tags', []))
+            }
+            full['resources'] = self.save_data(full)
+            self.datasets.append(full)
+
+    def iterate_anios(self):
+        """ Iterar por los años de una query que lo requiere
+            Esta funcion carga sel.datasets con todos los datos 
+                encontrados que no estén vacios.
+            """
+        anios = range(2020, 1979, -1)  # TODO, definir otra forma más dinámica
+        for anio in anios:
+            # definir un nombre personalizado para cada recurso
+            data = self.harvest(anio=anio)
+            if self.data_is_empty(data):
+                logger.info('Dataset vacío: {} {}'.format(self.params['name'], anio))
+                continue
+            title = self.params['title'].encode('utf-8')
+            notes = self.params['notes'].encode('utf-8')
+            full = {
+                'name': '{}-{}'.format(self.params['name'], anio),
+                'title': '{} {}'.format(title, anio),
+                'notes': notes,
+                'data': data,
+                'tags': self.build_tags(tags=self.params.get('tags', []))
+            }
+            full['resources'] = self.save_data(full)
+            self.datasets.append(full)
+
+    def request_data(self, query=None, anio=None):
+        """ consultar la URL con los parámetros definidos 
+            y devolver el resultado.
+            No se requiere en general cargar el parámetro 
+            'query' porque se usan los parámetros locales 
+            (self.params). Solo se usa para consultas especiales
+            (por ejemplo para obetner sublistas) """
+        
+        if query is None:
+            query = self.params
+        
+        if len(query.keys()) == 0:
             error = 'Error: Intentando leer datos sin los parámetros no cargados'
             logger.error(error)
             self.errors.append(error)
             return None
 
-        query = self.params
         name = query['name']
         logger.info('Request data from Query File {}, anio: {}'.format(name, anio))
         
@@ -132,6 +216,7 @@ class SIUTranspQueryFile:
             logger.error(error)
             self.errors.append(error)
             return None
+        
         return data
     
     def get_metadata(self):
