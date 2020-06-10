@@ -1,14 +1,14 @@
 {
-    "name": "comprado-por-dependencia",
-    "title": "Evolución del total comprado por dependencia",
+    "name": "top-proveedor-por-rubro",
+    "title": "Top proveedor por rubro",
     "notes": "",
     "internals": "Describir mejor",
     "tags": [
-        "Compras", "Gastos", "Dependencias"
+        "Compras", "Gastos", "Proveedores"
     ],
     "params": {
         "path": "/home/SIU-Wichi/Portal Transparencia/cda/2_compras.cda",
-        "dataAccessId": "tablero_06",
+        "dataAccessId": "tablero_09",
         "outputIndexId": 1,
         "pageSize": 0,
         "pageStart": 0,

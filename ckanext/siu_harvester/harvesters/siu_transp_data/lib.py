@@ -183,8 +183,14 @@ class SIUTranspQueryFile:
         """ a veces iteramos sobre elementos que dan resultados vacios
             No crear datasets en esos casos """
         
-        return len(data['resultset']) == 0
+        is_empty = False
+        if data is None:  # No hay un JSON para este query
+            is_empty = True
+        elif len(data['resultset']) == 0:
+            is_empty = True
 
+        return is_empty
+        
     def save_metadata(self):
         """ grabar los metadatos (personalizados, el harvester ya guarda algunos) de este proceso de cosecha """
         data_str = json.dumps(self.metadata, indent=4)
