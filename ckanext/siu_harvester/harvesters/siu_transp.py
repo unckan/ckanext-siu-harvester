@@ -197,12 +197,12 @@ class SIUTransparenciaHarvester(HarvesterBase):
         if action not in ['create', 'update']:
             raise Exception('Unexpected action {}'.format(action))
             
-        logger.info('Package {} {}'.format(action, json.dumps(pkg, indent=4)))
+        # logger.info('Package {} {}'.format(action, json.dumps(pkg, indent=4)))
 
         # actualizar los recursos para que se suban los arvhivos locales
         resources = pkg['resources']
         for resource in resources:
-            logger.info('Updating resource {}'.format(json.dumps(resource, indent=4)))
+            logger.info('Updating resource {}'.format(resource['name']))
             # fn = p.toolkit.get_action('resource_update')
             # res = fn(context, resource)
             # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
@@ -219,7 +219,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             # xs = p.toolkit.get_action('xloader_submit')(None, {'resource_id': resource['id']})
 
             final_resource = p.toolkit.get_action('resource_show')(context, {'id': resource['id']})
-            logger.info('Final resource {}'.format(json.dumps(final_resource, indent=4)))
+            logger.info('Final resource {}'.format(final_resource['name']))
             
         # Mark previous objects as not current
         previous_object = model.Session.query(HarvestObject) \
