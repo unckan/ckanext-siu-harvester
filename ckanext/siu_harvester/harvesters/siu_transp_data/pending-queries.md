@@ -8,11 +8,23 @@ Se peude ver esta lista
 
 ```
 // RR. HH.
-'16': 'Distribución de cargos activos por escalafón',
-'17': 'Distribución de cargos activos por dependencia',
-'18': 'Evolución de cargos activos por escalafón',
-'19': 'Evolución de cargos activos por dependencia',
-'20': 'Evolución de cargos activos por género',
+18 Evolución de cargos activos por escalafón
+ - Falta todavía listar las universidades ya que se puede hacer un query extra para cada una
+    - Obtener universidades con:
+    4_rrhh.cda 
+      paramprm_tablero_visible: 18 ACA LE DECIMOS PARA CUAL
+      dataAccessId: param_ua_cargos
+
+    - Luego se hace el llamado igual a tablero_18 pero con
+      paramprm_ua_cargos: Cine y TV
+
+20 Evolución de cargos activos por género
+  - Falta obtener la lista de universidades
+  - Obtener universidades con:
+    4_rrhh.cda 
+      paramprm_tablero_visible: 20 ACA LE DECIMOS PARA CUAL
+      dataAccessId: param_ua_cargos
+
 // ACADEMICA
 '21': 'Evolución de alumnos por año',
 '211': 'Distribución de alumnos por facultad',

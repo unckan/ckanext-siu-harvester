@@ -184,7 +184,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             try:
                 pkg = p.toolkit.get_action('package_create')(context, package_dict)
             except Exception, e:
-                logger.error('Error creating package {}'.format(str(e)))
+                logger.error('Error creating package {}: {}'.format(str(e), package_dict))
                 # TODO, no debería suceder
                 if str(e).find('already in use') > 0:
                     action = 'update'
@@ -246,6 +246,8 @@ class SIUTransparenciaHarvester(HarvesterBase):
         self.query_files = []
 
         for f in os.listdir(self.queries_path):
+            if f != '4-RRHH-tablero_18.json':
+                continue
             logger.info('Get query file {}'.format(f))
             path = os.path.join(self.queries_path, f)
             if os.path.isfile(path):

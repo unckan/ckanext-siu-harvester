@@ -1,0 +1,21 @@
+{
+    "name": "distribucion-de-cargos-por-dependencia",
+    "title": "Distribución de cargos activos por dependencia",
+    "notes": "",
+    "internals": "Describir mejor",
+    "iterables": {
+        "anio_param": "paramprm_ej_cargos"
+    },
+    "tags": [
+        "Cargos", "Personal", "Dependencias"
+    ],
+    "params": {
+        "paramprm_ej_cargos": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/4_rrhh.cda",
+        "dataAccessId": "tablero_17",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D"
+        }
+}
