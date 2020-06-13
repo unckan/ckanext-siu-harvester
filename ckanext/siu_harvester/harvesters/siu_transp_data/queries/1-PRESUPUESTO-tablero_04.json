@@ -4,7 +4,16 @@
     "notes": "Esta es la distribución de gastos por dependencia",
     "internals": "mejorar las notas/descripcion",
     "iterables": {
-        "anio_param": "paramprm_ej_presup"
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "4",
+                "dataAccessId": "param_anios_presup",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_presup"
+        }
     },
     "tags": [
         "Presupuesto", "Gastos", "Dependencias"

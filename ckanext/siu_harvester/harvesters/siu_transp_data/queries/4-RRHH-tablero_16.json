@@ -4,7 +4,16 @@
     "notes": "",
     "internals": "Describir mejor",
     "iterables": {
-        "anio_param": "paramprm_ej_cargos"
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "16",
+                "dataAccessId": "param_anios_cargos",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_cargos"
+        }
     },
     "tags": [
         "Cargos", "Personal"

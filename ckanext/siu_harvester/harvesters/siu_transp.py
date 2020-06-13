@@ -11,7 +11,7 @@ from ckan.lib.helpers import json
 from ckan import logic
 
 from ckanext.harvest.harvesters.base import HarvesterBase
-from ckanext.harvest.model import HarvestObject
+from ckanext.harvest.model import HarvestObject, HarvestGatherError, HarvestObjectError
 from ckanext.harvest.helpers import get_harvest_source
 from ckanext.siu_harvester.harvesters.siu_transp_data.lib import SIUTranspQueryFile
 
@@ -106,6 +106,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         # Iterar por cada query para obtener diferentes conjuntos de datos
         # Por cada archivo en siu_transp_data/queries se generarán múltiples datasets para publicar
         
+        report = []  # resumen de todos los resultados
         logger.info('Iter files')
         for qf in self.query_files:
             logger.info('Gather SIU Transp FILE {}'.format(qf))
@@ -114,7 +115,11 @@ class SIUTransparenciaHarvester(HarvesterBase):
             stqf.open()
             # request all data
             stqf.request_all()
+            for err in stqf.errors:
+                hgerr = HarvestGatherError(message=err, job=harvest_job)
+                hgerr.save()
 
+            report += stqf.requests
             for dataset in stqf.datasets:
                 if dataset['name'] in prev_names:
                     action = 'update'
@@ -143,7 +148,8 @@ class SIUTransparenciaHarvester(HarvesterBase):
 
         # TODO compare with previous harvested data to remove dataset no more at harvest source
 
-        logger.info('REQUESTS: \n{}'.format(stqf.get_requests_report))
+        # resumen final
+        logger.info('REQUESTS: \n{}'.format('\n\t'.join(report)))
         return object_ids
     
     def fetch_stage(self, harvest_object):
@@ -190,7 +196,10 @@ class SIUTransparenciaHarvester(HarvesterBase):
                 if str(e).find('already in use') > 0:
                     action = 'update'
                 else:
-                    raise
+                    msg = 'Import error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
+                    harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
+                    harvest_object_error.save()
+                    return False
 
         if action == 'update':
             pkg = p.toolkit.get_action('package_update')(context, package_dict)

@@ -4,7 +4,16 @@
     "notes": "insterpretado por SQL, revisar",
     "internals": "",
     "iterables": {
-        "anio_param": "paramprm_ej_academ"
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "26",
+                "dataAccessId": "param_anios_academ",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_academ"
+        }
     },
     "tags": [
         "Egresados", "Dependencia"

@@ -68,14 +68,10 @@ Por ejemplo `egresados-pos-facultad.json`
     "name": "distribucion-de-egresados-por-facultad",
     "title": "Distribución de egresados por facultad",
     "notes": "Esta es la cantidad de egresados por facultad de este año",
-    "iterables": {
-        "anio_param": "paramprm_ej_presup"
-    },
     "tags": [
         "Egresados"
     ],
     "params": {
-        "paramprm_ej_academ": 2020,
         "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
         "dataAccessId": "tablero_26",
         "outputIndexId": 1,
