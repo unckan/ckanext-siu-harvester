@@ -1,0 +1,21 @@
+{
+    "name": "egresados-por-facultad-por-anio",
+    "title": "Egresados por Facultad por año",
+    "notes": "insterpretado por SQL, revisar",
+    "internals": "",
+    "iterables": {
+        "anio_param": "paramprm_ej_academ"
+    },
+    "tags": [
+        "Egresados", "Dependencia"
+    ],
+    "params": {
+        "paramprm_ej_academ": "aca se aplica la sublista",
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
+        "dataAccessId": "tablero_24",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D",
+        "paramsearchBox": null}
+ }
