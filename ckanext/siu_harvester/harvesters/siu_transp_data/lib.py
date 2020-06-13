@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class SIUTranspQueryFile:
     """ Cada uno de los archivos para consultar al portal de transparencia """
 
-    def __init__(self, harvest_source, path, params={}):
+    def __init__(self, harvest_source, path, params={}, timeout=5):
         """ inicializar un archivo de consulta al portal de transparencia
             Params:
                 harvest_source (SIUTransparenciaHarvester): Origen que llama a esta consulta
@@ -24,7 +24,9 @@ class SIUTranspQueryFile:
         real_path = os.path.join(harvest_source.queries_path, path)
         self.path = real_path
         self.params = params
+        self.timeout = timeout
         self.errors = []
+        self.requests = []  # lista de todas las queries hechas
         self.datasets = []  # resultados de todos (puede haber más de uno si hay iterables) los requests hacia el origen
     
     def open(self):
@@ -107,7 +109,10 @@ class SIUTranspQueryFile:
         data = self.request_data(query=sub_list)
         # aca recibimos un JSON como en los datasets.
         # interpretamos que resultset tendrá una lista de los valores que buscamos
-        elementos = data['resultset']
+        if data is None:  # tiene que ser algun error
+            elementos = []
+        else:
+            elementos = data.get('resultset', [])
 
         # estos valores deben ser pasados al parametro definido en 'apply_to'
         apply_to = sub_list['apply_to']
@@ -201,13 +206,16 @@ class SIUTranspQueryFile:
             anio_param = self.params['iterables']['anio_param']
             params[anio_param] = anio
 
-        logger.info('Request URL {}, PARAMS: {}'.format(base_url, params))
+        req = {'URL': base_url, 'params': params, 'error': None, 'row': 0}
+        logger.info('Request URL {}, PARAMS: {}'.format(base_url, params))        
         try:
-            resp = requests.post(base_url, auth=(username, password), data=params)  #, headers=headers)
+            resp = requests.post(base_url, auth=(username, password), data=params, timeout=self.timeout)  #, headers=headers)
         except Exception, e:
             error = 'Error en request para obtener datos. URL: {}. Params: {}. Error: {}'.format(base_url, params, e)
             logger.error(error)
             self.errors.append(error)
+            req['error'] = error
+            self.requests.append(req)
             return None
         
         try:
@@ -216,10 +224,18 @@ class SIUTranspQueryFile:
             error = 'JSON error. Response: {}\n\tURL: {}\n\tParams: {}\n\tError: {}'.format(resp.text, base_url, params, e)
             logger.error(error)
             self.errors.append(error)
+            req['error'] = error
+            self.requests.append(req)
             return None
         
+        req['rows'] = len(data['resultset'])
+        self.requests.append(req)
+            
         return data
     
+    def get_requests_report(self):
+        return json.dumps(self.requests, indent=4)
+
     def get_metadata(self):
         """ obtener metadatos del proceso de harvesting para actualizar """
         name = self.params['name']
@@ -272,7 +288,7 @@ class SIUTranspQueryFile:
         is_empty = False
         if data is None:  # No hay un JSON para este query
             is_empty = True
-        elif len(data['resultset']) == 0:
+        elif len(data.get('resultset', [])) == 0:
             is_empty = True
 
         return is_empty

@@ -143,6 +143,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
 
         # TODO compare with previous harvested data to remove dataset no more at harvest source
 
+        logger.info('REQUESTS: \n{}'.format(stqf.get_requests_report))
         return object_ids
     
     def fetch_stage(self, harvest_object):
