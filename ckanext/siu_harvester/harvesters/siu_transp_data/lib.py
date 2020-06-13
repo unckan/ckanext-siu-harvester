@@ -59,9 +59,7 @@ class SIUTranspQueryFile:
         logger.info('Request All from Query File {}'.format(self.params['name']))
         
         if 'iterables' in self.params:
-            if "anio_param" in self.params['iterables']:
-                self.iterate_anios()
-            elif "sub_list" in self.params['iterables']:
+            if "sub_list" in self.params['iterables']:
                 sub_list = self.params['iterables']['sub_list']
                 self.iterate_sublist(sub_list=sub_list)
         else:
@@ -153,31 +151,7 @@ class SIUTranspQueryFile:
             full['resources'] = self.save_data(full)
             self.datasets.append(full)
 
-    def iterate_anios(self):
-        """ Iterar por los años de una query que lo requiere
-            Esta funcion carga sel.datasets con todos los datos 
-                encontrados que no estén vacios.
-            """
-        anios = range(2020, 1979, -1)  # TODO, definir otra forma más dinámica
-        for anio in anios:
-            # definir un nombre personalizado para cada recurso
-            data = self.harvest(anio=anio)
-            if self.data_is_empty(data):
-                logger.info('Dataset vacío: {} {}'.format(self.params['name'], anio))
-                continue
-            title = self.params['title'].encode('utf-8')
-            notes = self.params['notes'].encode('utf-8')
-            full = {
-                'name': '{}-{}'.format(self.params['name'], anio),
-                'title': '{} {}'.format(title, anio),
-                'notes': notes,
-                'data': data,
-                'tags': self.build_tags(tags=self.params.get('tags', []))
-            }
-            full['resources'] = self.save_data(full)
-            self.datasets.append(full)
-
-    def request_data(self, query=None, anio=None):
+    def request_data(self, query=None):
         """ consultar la URL con los parámetros definidos 
             y devolver el resultado.
             No se requiere en general cargar el parámetro 
@@ -195,46 +169,48 @@ class SIUTranspQueryFile:
             return None
 
         name = query['name']
-        logger.info('Request data from Query File {}, anio: {}'.format(name, anio))
+        logger.info('Request data from Query File {}'.format(name))
         
         base_url = self.harvest_source.source.url
         username = self.harvest_source.source_config.get('username')
         password = self.harvest_source.source_config.get('password')
         params = query['params']
-        # revisar los iterables y actualizar a lo que corresponda
-        if anio is not None:
-            anio_param = self.params['iterables']['anio_param']
-            params[anio_param] = anio
-
-        req = {'URL': base_url, 'params': params, 'error': None, 'row': 0}
+        
+        p = self.get_request_uid(params)
         logger.info('Request URL {}, PARAMS: {}'.format(base_url, params))        
         try:
             resp = requests.post(base_url, auth=(username, password), data=params, timeout=self.timeout)  #, headers=headers)
         except Exception, e:
-            error = 'Error en request para obtener datos. URL: {}. Params: {}. Error: {}'.format(base_url, params, e)
+            error = '{} Error en request para obtener datos. Error: {}'.format(p, e)
             logger.error(error)
             self.errors.append(error)
-            req['error'] = error
-            self.requests.append(req)
+            self.requests.append('{} ERROR request'.format(p))
             return None
         
         try:
             data = resp.json()
         except Exception, e:
-            error = 'JSON error. Response: {}\n\tURL: {}\n\tParams: {}\n\tError: {}'.format(resp.text, base_url, params, e)
+            error = '{} JSON error. \n\tResponse: {}\n\tError: {}'.format(p, resp.text, e)
             logger.error(error)
             self.errors.append(error)
-            req['error'] = error
-            self.requests.append(req)
+            self.requests.append('{} ERROR JSON'.format(p))
             return None
         
-        req['rows'] = len(data['resultset'])
+        rows = len(data.get('resultset', []))
+        self.requests.append('{} OK ROWS {}'.format(p, rows))
         self.requests.append(req)
-            
+
         return data
     
-    def get_requests_report(self):
-        return json.dumps(self.requests, indent=4)
+    def get_request_uid(self, params):
+        """ obtener un resumen identificador de una consulta """
+        path = params.get('path', '/no-path')
+        upath = path.split('/')[-1]
+        udaci = params.get('dataAccessId', 'no-access-id')
+        extras = ['{}:{}'.format(k, v) for k, v in params.items() if k.startswith('paramprm')]
+        uextras = ' '.join(extras)
+        uid = '{} {} {}'.format(upath, udaci, uextras)
+        return uid
 
     def get_metadata(self):
         """ obtener metadatos del proceso de harvesting para actualizar """
@@ -258,27 +234,10 @@ class SIUTranspQueryFile:
         self.metadata = metadata 
         return metadata
 
-    def harvest(self, anio=None):
+    def harvest(self):
         """ Lanzar el proceso de cosecha y guardar los resultados para un año específico """
         
-        self.errors = []  # reiniciar los errores para este proceso
-        
-        metadata = self.get_metadata()
-        metadata['global']['harvest_count'] += 1
-        
-        data = self.request_data(anio=anio)
-
-        if anio is not None:
-            if anio not in metadata:
-                metadata[anio] = {
-                    'harvest_count': 1,
-                    'last_harvest_ok': data is not None, 
-                    'last_errors': self.errors
-                }
-            
-        self.metadata = metadata
-        self.save_metadata()
-        
+        data = self.request_data()
         return data
 
     def data_is_empty(self, data):

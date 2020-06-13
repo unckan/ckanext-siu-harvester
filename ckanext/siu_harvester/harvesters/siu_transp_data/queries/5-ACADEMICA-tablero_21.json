@@ -4,7 +4,16 @@
     "notes": "Esta es la cantidad de egresados por facultad de este año",
     "internals": "Consulta por años para la cantidad de egresados",
     "iterables": {
-        "anio_param": "paramprm_ej_academ"
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "21",
+                "dataAccessId": "param_anios_academ",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_academ"
+        }
     },
     "tags": [
         "Egresados"

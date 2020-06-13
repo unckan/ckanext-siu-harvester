@@ -4,7 +4,16 @@
     "notes": "Esta es la distribución de gastos por inciso",
     "internals": "Al parecer esta relacionado con el presupuesto, quizas requiera más estudio",
     "iterables": {
-        "anio_param": "paramprm_ej_presup"
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "5",
+                "dataAccessId": "param_anios_presup",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_presup"
+        }
     },
     "tags": [
         "Presupuesto", "Gastos"
