@@ -247,8 +247,6 @@ class SIUTransparenciaHarvester(HarvesterBase):
         self.query_files = []
 
         for f in os.listdir(self.queries_path):
-            if f != '4-RRHH-tablero_18.json':
-                continue
             logger.info('Get query file {}'.format(f))
             path = os.path.join(self.queries_path, f)
             if os.path.isfile(path):
