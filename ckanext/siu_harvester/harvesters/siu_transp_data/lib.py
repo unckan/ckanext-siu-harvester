@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import requests
-
+from slugify import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class SIUTranspQueryFile:
     """ Cada uno de los archivos para consultar al portal de transparencia """
 
-    def __init__(self, harvest_source, path, params={}):
+    def __init__(self, harvest_source, path, params={}, timeout=5):
         """ inicializar un archivo de consulta al portal de transparencia
             Params:
                 harvest_source (SIUTransparenciaHarvester): Origen que llama a esta consulta
@@ -24,7 +24,9 @@ class SIUTranspQueryFile:
         real_path = os.path.join(harvest_source.queries_path, path)
         self.path = real_path
         self.params = params
+        self.timeout = timeout
         self.errors = []
+        self.requests = []  # lista de todas las queries hechas
         self.datasets = []  # resultados de todos (puede haber más de uno si hay iterables) los requests hacia el origen
     
     def open(self):
@@ -57,33 +59,16 @@ class SIUTranspQueryFile:
         logger.info('Request All from Query File {}'.format(self.params['name']))
         
         if 'iterables' in self.params:
-            if "anio_param" in self.params['iterables']:
-                anios = range(2020, 2009, -1)  # TODO, definir otra forma más dinámica
-                for anio in anios:
-                    # definir un nombre personalizado para cada recurso
-                    data = self.harvest(anio=anio)
-                    if self.data_is_empty(data):
-                        logger.info('Dataset vacío: {} {}'.format(self.params['name'], anio))
-                        continue
-                    title = self.params['title'].encode('utf-8')
-                    notes = self.params['notes'].encode('utf-8')
-                    full = {
-                        'name': '{}-{}'.format(self.params['name'], anio),
-                        'title': '{} {}'.format(title, anio),
-                        'notes': notes,
-                        'data': data,
-                        'tags': self.build_tags(tags=self.params.get('tags', []))
-                    }
-                    full['resources'] = self.save_data(full)
-                    self.datasets.append(full)
-
+            if "sub_list" in self.params['iterables']:
+                sub_list = self.params['iterables']['sub_list']
+                self.iterate_sublist(sub_list=sub_list)
         else:
             data = self.harvest()
             if self.data_is_empty(data):
                 logger.info('Dataset vacío: {}'.format(self.params['name']))
                 return
-            title = self.params['title']
-            notes = self.params['notes']
+            title = self.params['title'].encode('utf-8')
+            notes = self.params['notes'].encode('utf-8')
                     
             full = {
                 'name': self.params['name'],
@@ -94,46 +79,139 @@ class SIUTranspQueryFile:
             }
             full['resources'] = self.save_data(full)
             self.datasets.append(full)
-
-    def request_data(self, anio=None):
-        """ consultar la URL con los parámetros definidos y devolver el resultado """
         
-        if len(self.params.keys()) == 0:
+    def iterate_sublist(self, sub_list={}):
+        """ Iterar por una sub-lista de una query que lo requiere
+            Esta funcion carga sel.datasets con todos los datos 
+                encontrados que no estén vacios.
+            La sublista debe ser definida de la forma
+            {
+                "help": "No requerido pero util para documentar",
+                "name": "lala",
+                "params": {
+                    "paramprm_tablero_visible": "18",
+                    "dataAccessId": "param_ua_cargos"
+                    }
+            }
+            """
+        name = sub_list['name']
+        logger.info('Iterando sublista: {}'.format(name))
+        # agregar los nuevos parámetros para la sublista tomando como base la lista original del archivo JSON.
+        params = self.params['params'].copy()
+        # pisar con los valores requeridos para la sub lista
+        params.update(sub_list['params'])
+        # quitar el parametro que despues se va a aplicar
+        apply_to = sub_list['apply_to']
+        del params[apply_to]
+        sub_list['params'] = params
+        data = self.request_data(query=sub_list)
+        # aca recibimos un JSON como en los datasets.
+        # interpretamos que resultset tendrá una lista de los valores que buscamos
+        if data is None:  # tiene que ser algun error
+            elementos = []
+        else:
+            elementos = data.get('resultset', [])
+
+        # estos valores deben ser pasados al parametro definido en 'apply_to'
+        apply_to = sub_list['apply_to']
+
+        for elem in elementos:
+            # aqui esperamos una lista de un solo elemento
+            value = elem[0]
+            logger.info('Buscando datos para la sublista: {}'.format(value))
+            # ahora estoy listo para la cosecha de los datos
+            # cada valor obtenido debe pasarse al campo definido en 'apply_to'
+            # y cosecharse
+            self.params['params'][apply_to] = value
+
+            data = self.harvest()
+            if self.data_is_empty(data):
+                logger.info('Dataset vacío: {} {}'.format(name, value))
+                continue
+            logger.info('Datos obtenidos para: {}'.format(value))
+            title = self.params['title'].encode('utf-8')
+            notes = self.params['notes'].encode('utf-8')
+            
+            # TODO analizar como transformar algunos valores no válidos 
+            # para ser usados como nombres
+            if value == '1-TODAS':
+                name_value = 'completo'
+                title_value = 'Completo'
+            else:
+                name_value = slugify(value)
+                title_value = value
+                
+            full = {
+                'name': '{}-{}'.format(self.params['name'], name_value),
+                'title': '{} {}'.format(title, title_value),
+                'notes': notes,
+                'data': data,
+                'tags': self.build_tags(tags=self.params.get('tags', []))
+            }
+            full['resources'] = self.save_data(full)
+            self.datasets.append(full)
+
+    def request_data(self, query=None):
+        """ consultar la URL con los parámetros definidos 
+            y devolver el resultado.
+            No se requiere en general cargar el parámetro 
+            'query' porque se usan los parámetros locales 
+            (self.params). Solo se usa para consultas especiales
+            (por ejemplo para obetner sublistas) """
+        
+        if query is None:
+            query = self.params
+        
+        if len(query.keys()) == 0:
             error = 'Error: Intentando leer datos sin los parámetros no cargados'
             logger.error(error)
             self.errors.append(error)
             return None
 
-        query = self.params
         name = query['name']
-        logger.info('Request data from Query File {}, anio: {}'.format(name, anio))
+        logger.info('Request data from Query File {}'.format(name))
         
         base_url = self.harvest_source.source.url
         username = self.harvest_source.source_config.get('username')
         password = self.harvest_source.source_config.get('password')
         params = query['params']
-        # revisar los iterables y actualizar a lo que corresponda
-        if anio is not None:
-            anio_param = self.params['iterables']['anio_param']
-            params[anio_param] = anio
-
+        
+        p = self.get_request_uid(params)
+        logger.info('Request URL {}, PARAMS: {}'.format(base_url, params))        
         try:
-            resp = requests.post(base_url, auth=(username, password), data=params)  #, headers=headers)
+            resp = requests.post(base_url, auth=(username, password), data=params, timeout=self.timeout)  #, headers=headers)
         except Exception, e:
-            error = 'Error en request para obtener datos. URL: {}. Params: {}. Error: {}'.format(base_url, params, e)
+            error = '{} Error en request para obtener datos. Error: {}'.format(p, e)
             logger.error(error)
             self.errors.append(error)
+            self.requests.append('{} ERROR request'.format(p))
             return None
         
         try:
             data = resp.json()
         except Exception, e:
-            error = 'JSON error. Response: {}\n\tURL: {}\n\tParams: {}\n\tError: {}'.format(resp.text, base_url, params, e)
+            error = '{} JSON error. \n\tResponse: {}\n\tError: {}'.format(p, resp.text, e)
             logger.error(error)
             self.errors.append(error)
+            self.requests.append('{} ERROR JSON'.format(p))
             return None
+        
+        rows = len(data.get('resultset', []))
+        self.requests.append('{} OK ROWS {}'.format(p, rows))
+        self.requests.append(req)
+
         return data
     
+    def get_request_uid(self, params):
+        """ obtener un resumen identificador de una consulta """
+        path = params.get('path', '/no-path')
+        upath = path.split('/')[-1]
+        udaci = params.get('dataAccessId', 'no-access-id')
+        extras = ['{}:{}'.format(k, v) for k, v in params.items() if k.startswith('paramprm')]
+        uextras = ' '.join(extras)
+        uid = '{} {} {}'.format(upath, udaci, uextras)
+        return uid
+
     def get_metadata(self):
         """ obtener metadatos del proceso de harvesting para actualizar """
         name = self.params['name']
@@ -156,34 +234,23 @@ class SIUTranspQueryFile:
         self.metadata = metadata 
         return metadata
 
-    def harvest(self, anio=None):
+    def harvest(self):
         """ Lanzar el proceso de cosecha y guardar los resultados para un año específico """
         
-        self.errors = []  # reiniciar los errores para este proceso
-        
-        metadata = self.get_metadata()
-        metadata['global']['harvest_count'] += 1
-        
-        data = self.request_data(anio=anio)
-
-        if anio is not None:
-            if anio not in metadata:
-                metadata[anio] = {
-                    'harvest_count': 1,
-                    'last_harvest_ok': data is not None, 
-                    'last_errors': self.errors
-                }
-            
-        self.metadata = metadata
-        self.save_metadata()
-        
+        data = self.request_data()
         return data
 
     def data_is_empty(self, data):
         """ a veces iteramos sobre elementos que dan resultados vacios
             No crear datasets en esos casos """
         
-        return len(data['resultset']) == 0
+        is_empty = False
+        if data is None:  # No hay un JSON para este query
+            is_empty = True
+        elif len(data.get('resultset', [])) == 0:
+            is_empty = True
+
+        return is_empty
 
     def save_metadata(self):
         """ grabar los metadatos (personalizados, el harvester ya guarda algunos) de este proceso de cosecha """

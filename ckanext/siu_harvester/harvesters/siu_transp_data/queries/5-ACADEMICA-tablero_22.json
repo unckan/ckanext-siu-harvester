@@ -1,0 +1,30 @@
+{
+    "name": "distribucion-de-egresados-por-carrera",
+    "title": "Distribución de egresados por carrera",
+    "notes": "Esta es la cantidad de egresados por carrera",
+    "internals": "",
+    "iterables": {
+        "sub_list": {
+            "help": "Necesitamos primero obtener la lista de unidades académicas con otra consulta",
+            "name": "lista-de-unidades-academicas",
+            "params": {
+                "paramprm_tablero_visible": "22",
+                "dataAccessId": "param_ua_academ",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ua_academ"
+        }
+    },
+    "tags": [
+        "Egresados", "Carreras"
+    ],
+    "params": {
+        "paramprm_ua_academ": "aca se aplica la sublista",
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
+        "dataAccessId": "tablero_22",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D",
+        "paramsearchBox": null}
+ }

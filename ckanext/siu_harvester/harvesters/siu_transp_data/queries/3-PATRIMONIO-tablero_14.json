@@ -1,0 +1,31 @@
+{
+    "name": "altas-patrimoniales-por-partida-parcial",
+    "title": "Altas patrimoniales por partida parcial",
+    "notes": "",
+    "internals": "Describir mejor",
+    "iterables": {
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "11",
+                "dataAccessId": "param_anios_patrimonio",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_patrimonio"
+        }
+    },
+    "tags": [
+        "Patrimonio", "Dependencias"
+    ],
+    "params": {
+        "paramprm_ej_patrimonio": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/3_patrimonio.cda",
+        "dataAccessId": "tablero_14",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D"
+        }
+ }
+ 

@@ -1,0 +1,30 @@
+{
+    "name": "gastos-por-fuente-de-financiamiento",
+    "title": "Gasto por fuente de financiamiento",
+    "notes": "Esta es la distribución de gastos por fuentes de financiamiento",
+    "internals": "Al parecer esta relacionado con el presupuesto, quizas requiera más estudio",
+    "iterables": {
+        "sub_list": {
+            "help": "Lista de años con datos",
+            "name": "anios",
+            "params": {
+                "paramprm_tablero_visible": "1",
+                "dataAccessId": "param_anios_presup",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ej_presup"
+        }
+    },
+    "tags": [
+        "Presupuesto", "Gastos", "Fuentes de financiamiento"
+    ],
+    "params": {
+        "paramprm_ej_presup": 2020,
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/1_presupuesto.cda",
+        "dataAccessId": "tablero_01",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }

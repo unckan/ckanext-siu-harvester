@@ -1,0 +1,17 @@
+{
+    "name": "comprado-por-dependencia",
+    "title": "Evolución del total comprado por dependencia",
+    "notes": "",
+    "internals": "Describir mejor",
+    "tags": [
+        "Compras", "Gastos", "Dependencias"
+    ],
+    "params": {
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/2_compras.cda",
+        "dataAccessId": "tablero_06",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }
