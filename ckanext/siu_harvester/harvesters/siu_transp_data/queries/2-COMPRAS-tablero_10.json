@@ -1,0 +1,17 @@
+{
+    "name": "compras-rubro",
+    "title": "Compras por rubro",
+    "notes": "",
+    "internals": "Describir mejor",
+    "tags": [
+        "Compras", "Gastos"
+    ],
+    "params": {
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/2_compras.cda",
+        "dataAccessId": "tablero_10",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": null
+        }
+ }
