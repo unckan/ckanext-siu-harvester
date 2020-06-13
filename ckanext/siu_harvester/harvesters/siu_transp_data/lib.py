@@ -198,8 +198,7 @@ class SIUTranspQueryFile:
         
         rows = len(data.get('resultset', []))
         self.requests.append('{} OK ROWS {}'.format(p, rows))
-        self.requests.append(req)
-
+        
         return data
     
     def get_request_uid(self, params):
