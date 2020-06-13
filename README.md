@@ -65,21 +65,35 @@ Por ejemplo `egresados-pos-facultad.json`
 
 ```
 {
-    "name": "distribucion-de-egresados-por-facultad",
-    "title": "Distribución de egresados por facultad",
-    "notes": "Esta es la cantidad de egresados por facultad de este año",
+    "name": "evolucion-de-cargos-activos-por-escalafon",
+    "title": "Evolución de cargos activos por escalafón",
+    "notes": "",
+    "internals": "Describir mejor",
+    "iterables": {
+        "sub_list": {
+            "help": "Necesitamos primero obtener la lista de unidades académicas con otra consulta",
+            "name": "lista-de-unidades-academicas",
+            "params": {
+                "paramprm_tablero_visible": "18",
+                "dataAccessId": "param_ua_cargos",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ua_cargos"
+        }
+    },
     "tags": [
-        "Egresados"
+        "Cargos", "Personal"
     ],
     "params": {
-        "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
-        "dataAccessId": "tablero_26",
+        "paramprm_ua_cargos": "",
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/4_rrhh.cda",
+        "dataAccessId": "tablero_18",
         "outputIndexId": 1,
         "pageSize": 0,
         "pageStart": 0,
-        "sortBy": "2D",
-        "paramsearchBox": null}
- }
+        "sortBy": "2D"
+        }
+}
 ```
 
 De esta forma este _harvester_ va a iterar por los años disponibles y creará un dataset para cada año.  
