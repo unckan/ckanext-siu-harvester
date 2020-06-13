@@ -3,6 +3,13 @@ Registro de cambios de esta extensión
 
 ## [Released]
 
+## [0.2.2] - 2020-06-13
+### Added
+- Corregidos los archivos de queries
+  - Completadas las queries faltantes
+  - Corregida las iteraciones
+  - Tests rotos localmente sin corregir ¯\_(ツ)_/¯
+
 ## [0.2.1] - 2020-06-05
 ### Added
 - Primera versión estable
