@@ -118,6 +118,10 @@ class SIUTranspQueryFile:
         for elem in elementos:
             # aqui esperamos una lista de un solo elemento
             value = elem[0]
+            if type(value) in [int, float]:
+                value = str(value)
+            else:
+                value = value.encode('utf-8')
             logger.info('Buscando datos para la sublista: {}'.format(value))
             # ahora estoy listo para la cosecha de los datos
             # cada valor obtenido debe pasarse al campo definido en 'apply_to'
