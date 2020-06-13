@@ -3,6 +3,18 @@
     "title": "Evolución de cargos activos por género",
     "notes": "",
     "internals": "Describir mejor",
+    "iterables": {
+        "sub_list": {
+            "help": "Necesitamos primero obtener la lista de unidades académicas con otra consulta",
+            "name": "lista-de-unidades-academicas",
+            "params": {
+                "paramprm_tablero_visible": "20",
+                "dataAccessId": "param_ua_cargos",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ua_cargos"
+        }
+    },
     "tags": [
         "Cargos", "Personal", "Dependencias"
     ],

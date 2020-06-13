@@ -201,6 +201,7 @@ class SIUTranspQueryFile:
             anio_param = self.params['iterables']['anio_param']
             params[anio_param] = anio
 
+        logger.info('Request URL {}, PARAMS: {}'.format(base_url, params))
         try:
             resp = requests.post(base_url, auth=(username, password), data=params)  #, headers=headers)
         except Exception, e:
