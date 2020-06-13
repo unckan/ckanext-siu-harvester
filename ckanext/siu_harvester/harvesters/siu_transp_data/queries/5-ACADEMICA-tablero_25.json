@@ -1,0 +1,30 @@
+{
+    "name": "nuevos-egresados-por-anio",
+    "title": "Egresados por año",
+    "notes": "interpretado por SQL, revisar",
+    "internals": "",
+    "iterables": {
+        "sub_list": {
+            "help": "Necesitamos primero obtener la lista de unidades académicas con otra consulta",
+            "name": "lista-de-unidades-academicas",
+            "params": {
+                "paramprm_tablero_visible": "25",
+                "dataAccessId": "param_ua_academ",
+                "sortBy": ""
+            },
+            "apply_to": "paramprm_ua_academ"
+        }
+    },
+    "tags": [
+        "Egresados", "Dependencias"
+    ],
+    "params": {
+        "paramprm_ua_academ": "aca se aplica la sublista",
+        "path": "/home/SIU-Wichi/Portal Transparencia/cda/5_academica.cda",
+        "dataAccessId": "tablero_23",
+        "outputIndexId": 1,
+        "pageSize": 0,
+        "pageStart": 0,
+        "sortBy": "2D",
+        "paramsearchBox": null}
+ }
