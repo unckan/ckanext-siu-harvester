@@ -212,14 +212,6 @@ class SIUTransparenciaHarvester(HarvesterBase):
             except Exception, e:
                 logger.error('Error creating resource {} {}'.format(resource, e))
                 raise
-            # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
-            # TODO debería poder agregarse desde resource_create pero parece que no se puede
-            # user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
-            # api_key = user_harvest['apikey']
-            # requests.post('http://localhost:5000/api/action/resource_update',
-            #     data={'id':resource['id']},
-            #     headers={'X-CKAN-API-Key': api_key},
-            #     files=[('upload', file(upload))])
             
             final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
             logger.info('Final resource {}'.format(final_resource['name']))
