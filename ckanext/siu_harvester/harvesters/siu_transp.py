@@ -169,18 +169,9 @@ class SIUTransparenciaHarvester(HarvesterBase):
         extras = package_dict.get('extras', [])
 
         extras = self.update_extras(extras, harvest_object)
-        
         package_dict['extras'] = extras
-
-        # remove resources, we are not able to upload in the create/upload pkg functs
-        resources = package_dict.get('resources', [])
-        for resource in resources:
-            # This should work but fails
-            # upload_from = resource.pop('upload')
-            # # resource['upload'] = FileStorage(filename=upload_from)
-            # resource['files'] = [('upload', file(upload_from))]
-            resource['url'] = ''
-            
+        resources = package_dict.pop('resources', [])
+        
         # Save (create or update) to CKAN
         # Using base class function ._create_or_update_package
         #   seems no useful to deal with resources
@@ -209,27 +200,29 @@ class SIUTransparenciaHarvester(HarvesterBase):
             
         # logger.info('Package {} {}'.format(action, json.dumps(pkg, indent=4)))
 
-        # actualizar los recursos para que se suban los arvhivos locales
-        # resources = pkg['resources']
-        # for resource in resources:
-        #     logger.info('Updating resource {}'.format(resource['name']))
-        #     # fn = p.toolkit.get_action('resource_update')
-        #     # res = fn(context, resource)
-        #     # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
-        #     upload = resource['upload']
-        #     # TODO debería poder agregarse desde resource_create pero parece que no se puede
-        #     user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
-        #     api_key = user_harvest['apikey']
-        #     requests.post('http://localhost:5000/api/action/resource_update',
-        #         data={'id':resource['id']},
-        #         headers={'X-CKAN-API-Key': api_key},
-        #         files=[('upload', file(upload))])
+        for resource in resources:
+            resource['package_id'] = pkg['id']
+            upload_from = resource.pop('upload')
+            resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
+            resource['url'] = ''
+        
+            fn = p.toolkit.get_action('resource_create')
+            try:
+                res = fn(context, resource)
+            except Exception, e:
+                logger.error('Error creating resource {} {}'.format(resource, e))
+                raise
+            # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
+            # TODO debería poder agregarse desde resource_create pero parece que no se puede
+            # user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
+            # api_key = user_harvest['apikey']
+            # requests.post('http://localhost:5000/api/action/resource_update',
+            #     data={'id':resource['id']},
+            #     headers={'X-CKAN-API-Key': api_key},
+            #     files=[('upload', file(upload))])
             
-        #     # re-send to XLOADER
-        #     # xs = p.toolkit.get_action('xloader_submit')(None, {'resource_id': resource['id']})
-
-        #     final_resource = p.toolkit.get_action('resource_show')(context, {'id': resource['id']})
-        #     logger.info('Final resource {}'.format(final_resource['name']))
+            final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
+            logger.info('Final resource {}'.format(final_resource['name']))
             
         # Mark previous objects as not current
         previous_object = model.Session.query(HarvestObject) \
