@@ -210,26 +210,26 @@ class SIUTransparenciaHarvester(HarvesterBase):
         # logger.info('Package {} {}'.format(action, json.dumps(pkg, indent=4)))
 
         # actualizar los recursos para que se suban los arvhivos locales
-        resources = pkg['resources']
-        for resource in resources:
-            logger.info('Updating resource {}'.format(resource['name']))
-            # fn = p.toolkit.get_action('resource_update')
-            # res = fn(context, resource)
-            # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
-            upload = resource['upload']
-            # TODO debería poder agregarse desde resource_create pero parece que no se puede
-            user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
-            api_key = user_harvest['apikey']
-            requests.post('http://localhost:5000/api/action/resource_update',
-                data={'id':resource['id']},
-                headers={'X-CKAN-API-Key': api_key},
-                files=[('upload', file(upload))])
+        # resources = pkg['resources']
+        # for resource in resources:
+        #     logger.info('Updating resource {}'.format(resource['name']))
+        #     # fn = p.toolkit.get_action('resource_update')
+        #     # res = fn(context, resource)
+        #     # logger.info('Resource updated {}'.format(json.dumps(res, indent=4)))
+        #     upload = resource['upload']
+        #     # TODO debería poder agregarse desde resource_create pero parece que no se puede
+        #     user_harvest = p.toolkit.get_action('user_show')(context, {'id': user_name})
+        #     api_key = user_harvest['apikey']
+        #     requests.post('http://localhost:5000/api/action/resource_update',
+        #         data={'id':resource['id']},
+        #         headers={'X-CKAN-API-Key': api_key},
+        #         files=[('upload', file(upload))])
             
-            # re-send to XLOADER
-            # xs = p.toolkit.get_action('xloader_submit')(None, {'resource_id': resource['id']})
+        #     # re-send to XLOADER
+        #     # xs = p.toolkit.get_action('xloader_submit')(None, {'resource_id': resource['id']})
 
-            final_resource = p.toolkit.get_action('resource_show')(context, {'id': resource['id']})
-            logger.info('Final resource {}'.format(final_resource['name']))
+        #     final_resource = p.toolkit.get_action('resource_show')(context, {'id': resource['id']})
+        #     logger.info('Final resource {}'.format(final_resource['name']))
             
         # Mark previous objects as not current
         previous_object = model.Session.query(HarvestObject) \
