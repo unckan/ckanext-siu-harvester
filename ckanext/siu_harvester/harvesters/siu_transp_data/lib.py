@@ -355,10 +355,13 @@ class SIUTranspQueryFile:
                 if isinstance(field, basestring):
                     field = field.encode('utf-8')
                 row_utf8[field_names_utf8[c]] = field
+                c += 1
             results.append(row_utf8)
             
         if save_path is not None:
-            pyexcel.save_as(records=results, dest_file_name=save_path)
+            pyexcel.save_as(records=results,
+                            dest_file_name=save_path,
+                            dest_encoding="UTF-8")
 
         return field_names_utf8, results 
     
