@@ -3,6 +3,13 @@ Registro de cambios de esta extensión
 
 ## [Released]
 
+## [0.2.3] - 2020-06-17
+### Added
+- Agregados y mejorados todos los archivos de queries
+  - Las sublistas ahora se aplican tambien para los años
+  - Se agregaron los recursos en excel
+  - Se reparó la subida de archivos como recursos¯
+
 ## [0.2.2] - 2020-06-13
 ### Added
 - Corregidos los archivos de queries

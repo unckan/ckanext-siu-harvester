@@ -3,6 +3,7 @@ import csv
 import json
 import logging
 import os
+import pyexcel
 import requests
 from slugify import slugify
 
@@ -118,6 +119,10 @@ class SIUTranspQueryFile:
         for elem in elementos:
             # aqui esperamos una lista de un solo elemento
             value = elem[0]
+            if type(value) in [int, float]:
+                value = str(value)
+            else:
+                value = value.encode('utf-8')
             logger.info('Buscando datos para la sublista: {}'.format(value))
             # ahora estoy listo para la cosecha de los datos
             # cada valor obtenido debe pasarse al campo definido en 'apply_to'
@@ -198,8 +203,7 @@ class SIUTranspQueryFile:
         
         rows = len(data.get('resultset', []))
         self.requests.append('{} OK ROWS {}'.format(p, rows))
-        self.requests.append(req)
-
+        
         return data
     
     def get_request_uid(self, params):
@@ -291,8 +295,19 @@ class SIUTranspQueryFile:
             'format': 'csv'
         }
 
+        # grabar tambien en XLS
+        filename = '{}.xls'.format(name)
+        save_to = os.path.join(self.harvest_source.results_path, filename)
+        self.json_to_xls(data=data, save_path=save_to)
+        res_xls = {
+            'title': '{} XLS'.format(title),
+            'name': '{}-xls'.format(name),
+            'upload': save_to,  # TODO no se puede mandar el path en el dict para que se cree solo :(
+            'format': 'xls'
+        }
+        
         # return CKAN resurces
-        resources = [res_csv, res_json]
+        resources = [res_csv, res_json, res_xls]
 
         return resources
     
@@ -322,7 +337,33 @@ class SIUTranspQueryFile:
                 wr.writerow(row)
             f.close()
 
-        return field_names_utf8, rows_utf8 
+        return field_names_utf8, rows_utf8
+
+    def json_to_xls(self, data, save_path=None):
+        """ transformar los datos JSON a CSV """
+        logger.info('JSON to XLS {}'.format(save_path))
+        metadata = data['metadata']
+        field_names = [md['colName'] for md in metadata]
+        field_names_utf8 = [fn.encode('utf-8') for fn in field_names]
+        rows = data['resultset']
+
+        results = []
+        for row in rows:
+            row_utf8 = {}
+            c = 0
+            for field in row:
+                if isinstance(field, basestring):
+                    field = field.encode('utf-8')
+                row_utf8[field_names_utf8[c]] = field
+                c += 1
+            results.append(row_utf8)
+            
+        if save_path is not None:
+            pyexcel.save_as(records=results,
+                            dest_file_name=save_path,
+                            dest_encoding="UTF-8")
+
+        return field_names_utf8, results 
     
     def build_tags(self, tags):
         return [{'name': tag} for tag in tags] 
