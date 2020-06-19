@@ -321,20 +321,20 @@ class SIUTranspQueryFile:
 
         if save_path is not None:
             f = open(save_path, 'w')
-            wr = csv.writer(f)
-            wr.writerow(field_names_utf8)
+            wr = csv.DictWriter(f, fieldnames=field_names_utf8)
+            wr.writeheader()
 
             rows_utf8 = []
             for row in rows:
-                row_utf8 = []
+                row_utf8 = {}
+                c = 0
                 for field in row:
                     if isinstance(field, basestring):
                         field = field.encode('utf-8')
-                    row_utf8.append(field)
+                    row_utf8[field_names_utf8[c]] = field
+                    c += 1
+                wr.writerow(row_utf8)
                 rows_utf8.append(row_utf8)
-            
-            for row in rows_utf8:
-                wr.writerow(row)
             f.close()
 
         return field_names_utf8, rows_utf8
