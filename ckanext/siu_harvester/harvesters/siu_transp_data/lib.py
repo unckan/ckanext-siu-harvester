@@ -11,25 +11,22 @@ logger = logging.getLogger(__name__)
 
 
 class SIUTranspQueryFile:
-    """ Cada uno de los archivos para consultar al portal de transparencia """
+    """ Cada uno de los archivos para consultar al portal de transparencia. """
 
-    def __init__(self, harvest_source, path, params={}, timeout=5):
+    def __init__(self, path, params={}, timeout=5):
         """ inicializar un archivo de consulta al portal de transparencia
             Params:
-                harvest_source (SIUTransparenciaHarvester): Origen que llama a esta consulta
                 path (str): Path al archivo de consulta
                 params (dict): Parámetros de la consulta, se consiguen en 
                     general en la funcion open pero podrían inicializarse aquí
                 """
-        self.harvest_source = harvest_source
-        real_path = os.path.join(harvest_source.queries_path, path)
-        self.path = real_path
+        self.path = path
         self.params = params
         self.timeout = timeout
         self.errors = []
         self.requests = []  # lista de todas las queries hechas
         self.datasets = []  # resultados de todos (puede haber más de uno si hay iterables) los requests hacia el origen
-    
+        
     def open(self):
         """ Abrir el archivo y cargar sus parámetros """
         logger.info('Opening Query File {}'.format(self.path))
@@ -52,7 +49,7 @@ class SIUTranspQueryFile:
         self.params = query
         return query
     
-    def request_all(self):
+    def request_all(self, results_folder_path):
         """ iterar por todos los datos. Usar los iterables definidos.
             Carga self.datasets 
             TODO se podría separar en gather y fetch a futuro"""
@@ -62,7 +59,7 @@ class SIUTranspQueryFile:
         if 'iterables' in self.params:
             if "sub_list" in self.params['iterables']:
                 sub_list = self.params['iterables']['sub_list']
-                self.iterate_sublist(sub_list=sub_list)
+                self.iterate_sublist(results_folder_path, sub_list=sub_list)
         else:
             data = self.harvest()
             if self.data_is_empty(data):
@@ -78,10 +75,10 @@ class SIUTranspQueryFile:
                 'data': data,
                 'tags': self.build_tags(tags=self.params.get('tags', []))
             }
-            full['resources'] = self.save_data(full)
+            full['resources'] = self.save_data(full, results_folder_path)
             self.datasets.append(full)
         
-    def iterate_sublist(self, sub_list={}):
+    def iterate_sublist(self, results_folder_path, sub_list={}):
         """ Iterar por una sub-lista de una query que lo requiere
             Esta funcion carga sel.datasets con todos los datos 
                 encontrados que no estén vacios.
@@ -153,7 +150,7 @@ class SIUTranspQueryFile:
                 'data': data,
                 'tags': self.build_tags(tags=self.params.get('tags', []))
             }
-            full['resources'] = self.save_data(full)
+            full['resources'] = self.save_data(full, results_folder_path)
             self.datasets.append(full)
 
     def request_data(self, query=None):
@@ -216,28 +213,6 @@ class SIUTranspQueryFile:
         uid = '{} {} {}'.format(upath, udaci, uextras)
         return uid
 
-    def get_metadata(self):
-        """ obtener metadatos del proceso de harvesting para actualizar """
-        name = self.params['name']
-        filename = '{}-metadata.json'.format(name)
-        path = os.path.join(self.harvest_source.results_path, filename)
-        if not os.path.isfile(path):
-            # inicializar los metadatos
-            # "global" es para todos los procesos, podría haber iterables con datos separados
-            metadata = {
-                'name': name,
-                'global': {
-                    'harvest_count': 0                    
-                }
-            }
-        else:
-            f = open(path, 'r')
-            metadata = json.load(f)
-            f.close()
-        
-        self.metadata = metadata 
-        return metadata
-
     def harvest(self):
         """ Lanzar el proceso de cosecha y guardar los resultados para un año específico """
         
@@ -256,24 +231,14 @@ class SIUTranspQueryFile:
 
         return is_empty
 
-    def save_metadata(self):
-        """ grabar los metadatos (personalizados, el harvester ya guarda algunos) de este proceso de cosecha """
-        data_str = json.dumps(self.metadata, indent=4)
-        name = self.params['name']
-        filename = '{}-metadata.json'.format(name)
-        save_to = os.path.join(self.harvest_source.results_path, filename)
-        f = open(save_to, 'w')
-        f.write(data_str)
-        f.close()
-
-    def save_data(self, full):
+    def save_data(self, full, results_folder_path):
         """ grabar los datos a disco """        
         name = full['name']
         title = full['title']
         data = full['data']
         data_str = json.dumps(data, indent=4)
         filename = '{}.json'.format(name)
-        save_to = os.path.join(self.harvest_source.results_path, filename)
+        save_to = os.path.join(results_folder_path, filename)
         f = open(save_to, 'w')
         f.write(data_str)
         f.close()
@@ -286,7 +251,7 @@ class SIUTranspQueryFile:
 
         # grabar tambien en CSV
         filename = '{}.csv'.format(name)
-        save_to = os.path.join(self.harvest_source.results_path, filename)
+        save_to = os.path.join(results_folder_path, filename)
         self.json_to_csv(data=data, save_path=save_to)
         res_csv = {
             'title': '{} CSV'.format(title),
@@ -297,7 +262,7 @@ class SIUTranspQueryFile:
 
         # grabar tambien en XLS
         filename = '{}.xls'.format(name)
-        save_to = os.path.join(self.harvest_source.results_path, filename)
+        save_to = os.path.join(results_folder_path, filename)
         self.json_to_xls(data=data, save_path=save_to)
         res_xls = {
             'title': '{} XLS'.format(title),
