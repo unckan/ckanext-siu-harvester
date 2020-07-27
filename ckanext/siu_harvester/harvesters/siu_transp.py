@@ -5,6 +5,9 @@ import os
 import requests
 from werkzeug.datastructures import FileStorage
 
+from siu_data.portal_data import SIUPoratlTransparenciaData
+from siu_data.query_file import SIUTranspQueryFile
+
 from ckan import plugins as p
 from ckan import model
 from ckan.lib.helpers import json
@@ -13,8 +16,6 @@ from ckan import logic
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.harvest.model import HarvestObject, HarvestGatherError, HarvestObjectError
 from ckanext.harvest.helpers import get_harvest_source
-from ckanext.siu_harvester.harvesters.siu_transp_data.siudata import SIUPoratlTransparenciaData
-from ckanext.siu_harvester.harvesters.siu_transp_data.lib import SIUTranspQueryFile
 
 
 logger = logging.getLogger(__name__)
