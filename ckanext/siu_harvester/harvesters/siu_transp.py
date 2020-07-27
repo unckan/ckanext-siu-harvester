@@ -26,11 +26,9 @@ class SIUTransparenciaHarvester(HarvesterBase):
     def set_paths(self):
         here = os.path.dirname(os.path.abspath(__file__))
         base = os.environ.get('CKAN_STORAGE_PATH', here)
-        self.data_path = os.path.join(base, 'siu_transp_data')
-        self.queries_path = os.path.join(here, 'siu_transp_data', 'queries')
-        self.results_path = os.path.join(self.data_path, 'results')
-        if not os.path.isdir(self.results_path):
-            os.makedirs(self.results_path)
+        self.results_folder_path = os.path.join(base, 'siu-harvester-results')
+        if not os.path.isdir(self.results_folder_path):
+            os.makedirs(self.results_folder_path)
         
         # librearia que gestiona los datos en el portal de SIU
         self.siu_data_lib = SIUPoratlTransparenciaData()
@@ -89,7 +87,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         logger.info('Starts Gather SIU Transp')
         # load paths
         self.set_paths()
-        self.siu_data_lib.get_query_files(base_folder_path=self.queries_path)
+        self.siu_data_lib.get_query_files()
 
         # basic things you'll need
         self.source = harvest_job.source
@@ -120,7 +118,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         logger.info('Iter files')
         for qf in self.siu_data_lib.query_files:
             logger.info('Gather SIU Transp FILE {}'.format(qf))
-            stqf = SIUTranspQueryFile(path=qf)
+            stqf = SIUTranspQueryFile(portal=self.siu_data_lib, path=qf)
             # open to read query params
             stqf.open()
             # request all data

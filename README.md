@@ -100,7 +100,7 @@ Ejemplo:
 ### Datos a extraer
 
 Estos endpoints pueden incluir multiples recursos. Cada recurso es un _query_ al endpoint ya listo para usar.  
-Estos ya están configurados en el directorio `ckanext/siu_harvester/harvesters/siu_transp_data/queries/`
+Estos ya están configurados en el directorio `queries` de la librería [siu-data](https://pypi.org/project/siu-data/)
 
 Por ejemplo `egresados-pos-facultad.json`
 
