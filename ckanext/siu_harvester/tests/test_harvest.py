@@ -96,7 +96,7 @@ class TestSIUHarvester(object):
 
     # TODO hay problemas con este cassete 
     @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassettes.yaml', 
-                      ignore_hosts=['solr', 'ckan'])
+                      ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
     def test_source_results(self):
         """ harvest waf1/ folder as waf source """
 
