@@ -111,3 +111,6 @@ class TestSIUHarvester(object):
         datasets = self.run_import()
 
         assert_equal(len(datasets), 16)
+
+        for dataset in datasets:
+            log.info('Dataset {}'.format(dataset.name))
