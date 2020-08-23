@@ -116,14 +116,15 @@ class SIUTransparenciaHarvester(HarvesterBase):
         
         report = []  # resumen de todos los resultados
         logger.info('Iter files')
-        files = 0
+        
         for qf in self.siu_data_lib.query_files:
-            max_files = self.source_config.get('max_files', 0)
-            if max_files > 0 and max_files == files:
-                logger.info('Skipping file by config {}'.format(qf))
-                continue
-            files += 1
-
+            only_files = self.source_config.get('only_files', None)
+            if only_files is not None:
+                fname = qf.split('/')[-1]
+                if fname not in only_files:
+                    logger.info('Skipping file by config {}'.format(fname))
+                    continue
+            
             logger.info('Gather SIU Transp FILE {}'.format(qf))
             stqf = SIUTranspQueryFile(portal=self.siu_data_lib, path=qf)
             # open to read query params

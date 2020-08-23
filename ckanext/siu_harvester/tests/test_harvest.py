@@ -95,14 +95,20 @@ class TestSIUHarvester(object):
         return datasets
 
     # TODO hay problemas con este cassete 
-    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassettes.yaml', 
+    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette.yaml', 
                       ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
     def test_source_results(self):
         """ harvest waf1/ folder as waf source """
 
         url = 'http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery'
-        # limit to 2 files only
-        self.config1 = '{"username": "usuario_transparencia", "password": "clave_transparencia", "max_files": 2}'
+        # limit to some files only
+        
+        cfg = {
+            "username": "usuario_transparencia",
+            "password": "clave_transparencia",
+            "only_files": ['1-PRESUPUESTO-tablero_01.json', '1-PRESUPUESTO-tablero_02.json']
+            }
+        self.config1 = json.dumps(cfg)
         
         self.run_gather(url=url, source_config=self.config1)
 
