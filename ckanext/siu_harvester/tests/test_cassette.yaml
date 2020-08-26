@@ -1,0 +1,703 @@
+interactions:
+- request:
+    body: !!python/unicode 'dataAccessId=param_anios_presup&sortBy=&pageSize=0&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0&paramprm_tablero_visible=1'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '179'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"15"},"resultset":[[2016],[2015],[2014],[2013],[2012],[2011],[2010],[2009],[2008],[2007],[2006],[2005],[2004],[2003],[2002]],"metadata":[{"colIndex":0,"colType":"Integer","colName":"anio"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=789CBDE40D736ED6A273EB5950E6BC9F; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2016&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",355062615.41,87.22],["REMANENTES EJERCICIOS ANTERIORES",27492307.63,6.75],["RECURSOS
+        PROPIOS",24512259.6,6.02]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=9B8DC5737874597F85E21CF69AA97A6B; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2015&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",1043455131.19,90.44],["REMANENTES EJERCICIOS ANTERIORES",40559927.01,3.52],["RECURSOS
+        PROPIOS",69762037.29,6.05]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=A0910EBA3AE81A44B45A6F7E4613C024; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2014&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",773278956.18,90.29],["REMANENTES EJERCICIOS ANTERIORES",23916841.06,2.79],["RECURSOS
+        PROPIOS",59271917.95,6.92]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=D64BD1856828B82F814A4D5E796A4FBE; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2013&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",566066260.37,89],["REMANENTES EJERCICIOS ANTERIORES",26727773.65,4.2],["RECURSOS
+        PROPIOS",43246853.26,6.8]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=62FB8D08F83639FF36151D04D6F596E9; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2012&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",454928592.64,91.33],["REMANENTES EJERCICIOS ANTERIORES",26145341.51,5.25],["RECURSOS
+        PROPIOS",17037453.17,3.42]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=63026B84526BF22DACBA08E238477AC4; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2011&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"3"},"resultset":[["TESORO
+        NACIONAL",350667410.76,91.48],["REMANENTES EJERCICIOS ANTERIORES",15648331.8,4.08],["RECURSOS
+        PROPIOS",17023895.26,4.44]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=6859ADE3FCD05D09DA0A6D66BB1CA3E6; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2010&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TRANSFERENCIAS
+        INTERNAS",1766613.08,0.57],["TESORO NACIONAL",277979443.26,89.46],["REMANENTES
+        EJERCICIOS ANTERIORES",13340251.08,4.29],["RECURSOS PROPIOS",17657055.53,5.68]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:38 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=0247CF49BC77ED1357F91C5BC48E3F5E; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2009&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"5"},"resultset":[["TRANSFERENCIAS
+        INTERNAS",852561.7,0.35],["TESORO NACIONAL",212381741.48,86.14],["REMANENTES
+        EJERCICIOS ANTERIORES",13972911.18,5.67],["RECURSOS PROPIOS",19332672.3,7.84],["RECURSOS
+        CON AFECTACION ESPECIFICA",20825.72,0.01]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=E72EF9C6D8B9250D95C17786B70E5514; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2008&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TRANSFERENCIAS
+        INTERNAS",119697.99,0.07],["TESORO NACIONAL",144911957.4,80.38],["REMANENTES
+        EJERCICIOS ANTERIORES",12342553.77,6.85],["RECURSOS PROPIOS",22915512.97,12.71]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=1ED198C4DE43734E66B9AE9DEE33AC0C; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2007&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TESORO
+        NACIONAL",112881574.58,84.98],["REMANENTES EJERCICIOS ANTERIORES",7023913.13,5.29],["RECURSOS
+        PROPIOS",12915559.51,9.72],["RECURSOS CON AFECTACION ESPECIFICA",7537.23,0.01]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=BAFD487C5E83C90D6B5D57DBF48D2F8A; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2006&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TESORO
+        NACIONAL",80198199.77,84.9],["REMANENTES EJERCICIOS ANTERIORES",7543848.74,7.99],["RECURSOS
+        PROPIOS",6698666.9,7.09],["RECURSOS CON AFECTACION ESPECIFICA",17969.29,0.02]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=34599947EBDCEDA1AB7BD6C3B6840F78; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2005&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TESORO
+        NACIONAL",63570129.09,81.11],["REMANENTES EJERCICIOS ANTERIORES",6962514.01,8.88],["RECURSOS
+        PROPIOS",7771799.12,9.92],["RECURSOS CON AFECTACION ESPECIFICA",72798.73,0.09]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=EBE0E80227E351D3F69FCC225FFD0D1A; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2004&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"5"},"resultset":[["TESORO
+        NACIONAL",46313798.55,77.65],["REMANENTES EJERCICIOS ANTERIORES",8876622.82,14.88],["RECURSOS
+        PROPIOS",4411098.07,7.4],["RECURSOS CON AFECTACION ESPECIFICA",45130.09,0.08],["CREDITO
+        EXTERNO",11.47,0]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=D7F7E1E02E71CC74B781D8D9D56DFEFA; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2003&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"5"},"resultset":[["TESORO
+        NACIONAL",40468166.13,85.45],["REMANENTES EJERCICIOS ANTERIORES",3908799.55,8.25],["RECURSOS
+        PROPIOS",2497179.19,5.27],["RECURSOS CON AFECTACION ESPECIFICA",8946,0.02],["CREDITO
+        EXTERNO",474507.02,1]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=D5E5D63C345760E1C77FE0FEFAFD546F; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_01&pageSize=0&paramprm_ej_presup=2002&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"4"},"resultset":[["TESORO
+        NACIONAL",39441410.46,89.88],["REMANENTES EJERCICIOS ANTERIORES",2047152.36,4.67],["RECURSOS
+        PROPIOS",2139847.31,4.88],["CREDITO EXTERNO",251564.22,0.57]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Numeric","colName":"total_devengado"},{"colIndex":2,"colType":"Numeric","colName":"porcentaje"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:39 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=46DB2D02801AFC483233606C3BE889B7; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/unicode 'dataAccessId=tablero_02&pageSize=0&outputIndexId=1&path=%2Fhome%2FSIU-Wichi%2FPortal+Transparencia%2Fcda%2F1_presupuesto.cda&pageStart=0'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Basic dXN1YXJpb190cmFuc3BhcmVuY2lhOmNsYXZlX3RyYW5zcGFyZW5jaWE=
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '136'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.24.0
+    method: POST
+    uri: http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery
+  response:
+    body:
+      string: !!python/unicode '{"queryInfo":{"totalRows":"44"},"resultset":[["CREDITO
+        EXTERNO",2007,117200.48],["RECURSOS CON AFECTACION ESPECIFICA",2007,52224.76],["RECURSOS
+        PROPIOS",2007,15095069.9],["REMANENTES EJERCICIOS ANTERIORES",2007,16177660.12],["TESORO
+        NACIONAL",2007,112759703.69],["CREDITO EXTERNO",2008,0],["RECURSOS CON AFECTACION
+        ESPECIFICA",2008,30684.78],["RECURSOS PROPIOS",2008,22815250.32],["REMANENTES
+        EJERCICIOS ANTERIORES",2008,15374251.76],["TESORO NACIONAL",2008,149648017.52],["TRANSFERENCIAS
+        INTERNAS",2008,1601260.16],["CREDITO EXTERNO",2009,0],["RECURSOS CON AFECTACION
+        ESPECIFICA",2009,31707.18],["RECURSOS PROPIOS",2009,21951297.96],["REMANENTES
+        EJERCICIOS ANTERIORES",2009,11956074.26],["TESORO NACIONAL",2009,222269914.84],["TRANSFERENCIAS
+        INTERNAS",2009,1162214.04],["CREDITO EXTERNO",2010,2108043.96],["RECURSOS
+        CON AFECTACION ESPECIFICA",2010,33050.5],["RECURSOS PROPIOS",2010,18017042.83],["REMANENTES
+        EJERCICIOS ANTERIORES",2010,19362072.61],["TESORO NACIONAL",2010,285338702.99],["TRANSFERENCIAS
+        INTERNAS",2010,1998521.08],["CREDITO EXTERNO",2011,0],["RECURSOS PROPIOS",2011,25935320.19],["REMANENTES
+        EJERCICIOS ANTERIORES",2011,29782639.74],["TESORO NACIONAL",2011,369320011.59],["CREDITO
+        INTERNO",2012,0],["RECURSOS PROPIOS",2012,24716020.2],["REMANENTES EJERCICIOS
+        ANTERIORES",2012,41698336.43],["TESORO NACIONAL",2012,473935587.99],["RECURSOS
+        PROPIOS",2013,57845317.63],["REMANENTES EJERCICIOS ANTERIORES",2013,41546910.67],["TESORO
+        NACIONAL",2013,579172125.5],["RECURSOS CON AFECTACION ESPECIFICA",2014,0],["RECURSOS
+        PROPIOS",2014,89941191.3],["REMANENTES EJERCICIOS ANTERIORES",2014,40930987.15],["TESORO
+        NACIONAL",2014,803743629.97],["RECURSOS PROPIOS",2015,116499070.11],["REMANENTES
+        EJERCICIOS ANTERIORES",2015,70124683.43],["TESORO NACIONAL",2015,1109806252.18],["RECURSOS
+        PROPIOS",2016,75249188.64],["REMANENTES EJERCICIOS ANTERIORES",2016,160352177.77],["TESORO
+        NACIONAL",2016,1130203551.6]],"metadata":[{"colIndex":0,"colType":"String","colName":"fuente_financiamiento"},{"colIndex":1,"colType":"Integer","colName":"ejercicio"},{"colIndex":2,"colType":"Numeric","colName":"total_credito"}]}'
+    headers:
+      content-disposition:
+      - inline; filename=doQuery.json
+      content-type:
+      - application/json
+      date:
+      - Sun, 23 Aug 2020 22:25:40 GMT
+      server:
+      - Apache-Coyote/1.1
+      set-cookie:
+      - JSESSIONID=AB0E531DA6136842CB3532CBBC83DB1C; Path=/pentaho/; HttpOnly
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

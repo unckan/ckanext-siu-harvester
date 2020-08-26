@@ -100,7 +100,7 @@ Ejemplo:
 ### Datos a extraer
 
 Estos endpoints pueden incluir multiples recursos. Cada recurso es un _query_ al endpoint ya listo para usar.  
-Estos ya están configurados en el directorio `ckanext/siu_harvester/harvesters/siu_transp_data/queries/`
+Estos ya están configurados en el directorio `queries` de la librería [siu-data](https://pypi.org/project/siu-data/)
 
 Por ejemplo `egresados-pos-facultad.json`
 
@@ -140,3 +140,15 @@ Por ejemplo `egresados-pos-facultad.json`
 De esta forma este _harvester_ va a iterar por los años disponibles y creará un dataset para cada año.  
 Es posible agregar más _queries_ para consumir más datos.
 
+## Tests 
+
+Locally
+
+```
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose-dev.yml \
+    exec ckan bash -c \
+    "cd src_extensions/ckanext-siu-harvester && \
+        nosetests --ckan --nologcapture --with-pylons=test.ini ckanext/siu_harvester/tests"
+```

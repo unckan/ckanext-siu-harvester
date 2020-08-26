@@ -15,7 +15,7 @@ cd ckan
 # echo "CKAN branch: $latest_ckan_release_branch"
 # git checkout $latest_ckan_release_branch
 
-git checkout 2.8
+git checkout ckan-2.8.4
 python setup.py develop
 pip install -r requirements.txt
 pip install -r dev-requirements.txt
