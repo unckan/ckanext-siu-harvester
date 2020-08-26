@@ -218,19 +218,14 @@ class SIUTransparenciaHarvester(HarvesterBase):
 
         for resource in resources:
             resource['package_id'] = pkg['id']
-            upload_from = resource.pop('upload')
-            resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
             resource['url'] = ''
-        
-            fn = p.toolkit.get_action('resource_create')
-            try:
-                res = fn(context, resource)
-            except Exception, e:
-                logger.error('Error creating resource {} {}'.format(resource, e))
-                raise
+            upload_from = resource.pop('upload')
             
-            final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
-            logger.info('Final resource {}'.format(final_resource['name']))
+            if os.path.isfile(upload_from):
+                resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
+                self.create_resource(context, resource)
+            else:
+                logger.error('Resource to upload not found {}'.format(upload_from))
             
         # Mark previous objects as not current
         previous_object = model.Session.query(HarvestObject) \
@@ -250,6 +245,19 @@ class SIUTransparenciaHarvester(HarvesterBase):
 
         return True
     
+    def create_resource(self, context, resource):
+        fn = p.toolkit.get_action('resource_create')
+        try:
+            res = fn(context, resource)
+        except Exception, e:
+            logger.error('Error creating resource {} {}'.format(resource, e))
+            raise
+        
+        final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
+        logger.info('Final resource {}'.format(final_resource['name']))
+
+        return final_resource
+
     def get_packages_for_source(self, harvest_source_id):
         '''
         Returns the current packages list for datasets associated with the given source id
