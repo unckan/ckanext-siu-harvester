@@ -1,5 +1,2 @@
 requests>=2.23.0
-python-slugify>=1.2.6
-pyexcel>=-0.5.15
-pyexcel-xls>=0.5.8
-pyexcel-xlsx>=0.5.8
+siu-data>=0.2.16

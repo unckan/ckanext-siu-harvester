@@ -5,6 +5,9 @@ import os
 import requests
 from werkzeug.datastructures import FileStorage
 
+from siu_data.portal_data import SIUPoratlTransparenciaData
+from siu_data.query_file import SIUTranspQueryFile
+
 from ckan import plugins as p
 from ckan import model
 from ckan.lib.helpers import json
@@ -13,7 +16,6 @@ from ckan import logic
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.harvest.model import HarvestObject, HarvestGatherError, HarvestObjectError
 from ckanext.harvest.helpers import get_harvest_source
-from ckanext.siu_harvester.harvesters.siu_transp_data.lib import SIUTranspQueryFile
 
 
 logger = logging.getLogger(__name__)
@@ -24,11 +26,12 @@ class SIUTransparenciaHarvester(HarvesterBase):
     def set_paths(self):
         here = os.path.dirname(os.path.abspath(__file__))
         base = os.environ.get('CKAN_STORAGE_PATH', here)
-        self.data_path = os.path.join(base, 'siu_transp_data')
-        self.queries_path = os.path.join(here, 'siu_transp_data', 'queries')
-        self.results_path = os.path.join(self.data_path, 'results')
-        if not os.path.isdir(self.results_path):
-            os.makedirs(self.results_path)
+        self.results_folder_path = os.path.join(base, 'siu-harvester-results')
+        if not os.path.isdir(self.results_folder_path):
+            os.makedirs(self.results_folder_path)
+        
+        # librearia que gestiona los datos en el portal de SIU
+        self.siu_data_lib = SIUPoratlTransparenciaData()
         
     ## IHarvester
     def info(self):
@@ -84,17 +87,22 @@ class SIUTransparenciaHarvester(HarvesterBase):
         logger.info('Starts Gather SIU Transp')
         # load paths
         self.set_paths()
-        self.get_query_files()
+        self.siu_data_lib.get_query_files()
 
         # basic things you'll need
         self.source = harvest_job.source
         self.source_config = json.loads(self.source.config)
 
+        self.siu_data_lib.base_url = self.source.url
+        self.siu_data_lib.username = self.source_config['username']
+        self.siu_data_lib.password = self.source_config['password']
+        
         # ####################################
         # get previous harvested packages
         pfr = self.get_packages_for_source(harvest_source_id=self.source.id)
         prev_names = [pkg['name'] for pkg in pfr['results']]
         logger.info('Get previous harvested objects {}'.format(prev_names))
+        # TODO
         # ####################################
         
         object_ids = []  # lista de IDs a procesar, esto se devuelve en esta funcion
@@ -108,13 +116,21 @@ class SIUTransparenciaHarvester(HarvesterBase):
         
         report = []  # resumen de todos los resultados
         logger.info('Iter files')
-        for qf in self.query_files:
+        
+        for qf in self.siu_data_lib.query_files:
+            only_files = self.source_config.get('only_files', None)
+            if only_files is not None:
+                fname = qf.split('/')[-1]
+                if fname not in only_files:
+                    logger.info('Skipping file by config {}'.format(fname))
+                    continue
+            
             logger.info('Gather SIU Transp FILE {}'.format(qf))
-            stqf = SIUTranspQueryFile(harvest_source=self, path=qf)
+            stqf = SIUTranspQueryFile(portal=self.siu_data_lib, path=qf)
             # open to read query params
             stqf.open()
             # request all data
-            stqf.request_all()
+            stqf.request_all(results_folder_path=self.results_folder_path)
             for err in stqf.errors:
                 hgerr = HarvestGatherError(message=err, job=harvest_job)
                 hgerr.save()
@@ -202,19 +218,14 @@ class SIUTransparenciaHarvester(HarvesterBase):
 
         for resource in resources:
             resource['package_id'] = pkg['id']
-            upload_from = resource.pop('upload')
-            resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
             resource['url'] = ''
-        
-            fn = p.toolkit.get_action('resource_create')
-            try:
-                res = fn(context, resource)
-            except Exception, e:
-                logger.error('Error creating resource {} {}'.format(resource, e))
-                raise
+            upload_from = resource.pop('upload')
             
-            final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
-            logger.info('Final resource {}'.format(final_resource['name']))
+            if os.path.isfile(upload_from):
+                resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
+                self.create_resource(context, resource)
+            else:
+                logger.error('Resource to upload not found {}'.format(upload_from))
             
         # Mark previous objects as not current
         previous_object = model.Session.query(HarvestObject) \
@@ -233,24 +244,20 @@ class SIUTransparenciaHarvester(HarvesterBase):
         harvest_object.save()
 
         return True
-
-    def get_query_files(self):
-        """ Generador para obtener cada uno de los archivos con datos para cosechar """
-        logger.info('Getting query files')
-        
-        self.query_files = []
-
-        for f in os.listdir(self.queries_path):
-            logger.info('Get query file {}'.format(f))
-            path = os.path.join(self.queries_path, f)
-            if os.path.isfile(path):
-                ext = f.split('.')[-1]
-                if ext != 'json':
-                    continue
-                self.query_files.append(f)
-        
-        return self.query_files
     
+    def create_resource(self, context, resource):
+        fn = p.toolkit.get_action('resource_create')
+        try:
+            res = fn(context, resource)
+        except Exception, e:
+            logger.error('Error creating resource {} {}'.format(resource, e))
+            raise
+        
+        final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
+        logger.info('Final resource {}'.format(final_resource['name']))
+
+        return final_resource
+
     def get_packages_for_source(self, harvest_source_id):
         '''
         Returns the current packages list for datasets associated with the given source id

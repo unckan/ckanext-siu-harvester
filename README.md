@@ -21,7 +21,48 @@ Esta extensión de CKAN esta pensada para obtener estos datos y publicarlos en f
 SIU incluye un [portal de transparencia](http://documentacion.siu.edu.ar/wiki/SIU-Wichi/Version6.6.0/portal_transparencia) que incluye un API.  
 Estos datos se toman de la base SIU-Wichi, que contiene datos provenientes de los módulos SIU-Pilaga (Presupuesto), SIU-Mapuche (RRHH), SIU-Diaguita (Compras y Patrimonio) y SIU-Araucano (Académicos).
 
-### Instalacion
+### Consultas
+
+Las consultas a la base de datose se definen en archivos CDA
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="myconnection" type="sql.jndi">
+         <Jndi>transparencia</Jndi>
+      </Connection>
+   </DataSources>
+
+   <DataAccess 
+       access="public" 
+       cache="true" 
+       cacheDuration="7200" 
+       connection="myconnection" 
+       id="IdParaUsarComDataAccessID" 
+       type="sql">
+      <Columns/>
+
+      <Parameter name="prm_anio" type="Numeric" default="0"/>
+      
+      <Query>SELECT field_a, field_b, field_c 
+                      FROM xtable
+                      where field_a = ${anio}
+      </Query>
+
+   </DataAccess>
+</CDADescriptor>
+```
+
+Este harvester lee los enpoints del API que expone cada archivo CDA.
+Los archivos CDA incluidos en el Portal de Transparencia ya están cubiertos 
+en este harvester. Esta listo para consumir y republicar datos.
+
+Es posible tambien definir archivos CDA personalizados y 
+[agregarlos al harvester](https://github.com/avdata99/ckanext-siu-harvester/issues/20)
+para consumir estos datos de manera automtizada y periódicamente.
+
+### Instalación
 
 Disponible en [Pypi](https://pypi.org/project/ckanext-siu-harvester/) o vía GitHub.  
 
@@ -59,7 +100,7 @@ Ejemplo:
 ### Datos a extraer
 
 Estos endpoints pueden incluir multiples recursos. Cada recurso es un _query_ al endpoint ya listo para usar.  
-Estos ya están configurados en el directorio `ckanext/siu_harvester/harvesters/siu_transp_data/queries/`
+Estos ya están configurados en el directorio `queries` de la librería [siu-data](https://pypi.org/project/siu-data/)
 
 Por ejemplo `egresados-pos-facultad.json`
 
@@ -99,3 +140,15 @@ Por ejemplo `egresados-pos-facultad.json`
 De esta forma este _harvester_ va a iterar por los años disponibles y creará un dataset para cada año.  
 Es posible agregar más _queries_ para consumir más datos.
 
+## Tests 
+
+Locally
+
+```
+docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose-dev.yml \
+    exec ckan bash -c \
+    "cd src_extensions/ckanext-siu-harvester && \
+        nosetests --ckan --nologcapture --with-pylons=test.ini ckanext/siu_harvester/tests"
+```
