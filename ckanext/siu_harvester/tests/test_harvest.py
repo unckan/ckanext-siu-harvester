@@ -95,7 +95,7 @@ class TestSIUHarvester(object):
         return datasets
 
     # TODO hay problemas con este cassete 
-    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette.yaml', 
+    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette_01.yaml', 
                       ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
     def test_source_results(self):
         """ harvest waf1/ folder as waf source """
@@ -122,7 +122,7 @@ class TestSIUHarvester(object):
             log.info('Dataset {}'.format(dataset.name))
     
 
-    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette.yaml', 
+    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette_02.yaml', 
                       ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
     def test_source_results(self):
         """ harvest waf1/ folder as waf source """
@@ -162,7 +162,7 @@ class TestSIUHarvester(object):
         self.run_fetch()
         datasets = self.run_import()
 
-        assert_equal(len(datasets), 15)
+        assert_equal(len(datasets), 13)
 
         for dataset in datasets:
             log.info('Dataset {}'.format(dataset.name))
