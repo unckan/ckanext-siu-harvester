@@ -143,7 +143,7 @@ class TestSIUHarvester(object):
                                 "height": "250",
                                 "chart_type": "Column",
                                 "chart_color": "#30AA71",
-                                "fields": "['fuente_financiamiento' ,'total_devengado]", 
+                                "fields": "['fuente_financiamiento' ,'total_devengado']", 
                                 }
                             }
                         },
