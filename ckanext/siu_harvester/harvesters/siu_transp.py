@@ -67,7 +67,16 @@ class SIUTransparenciaHarvester(HarvesterBase):
             config_obj = json.loads(config)
         except ValueError as e:
             raise e
-
+        
+        # allow to get config from URL
+        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        config_from_url = config_obj.get('from_url', None)
+        if config_from_url is not None:
+            logger.info('Updating config from URL')
+            response = requests.get(config_from_url)
+            update_config = response.json()
+            config_obj.update(update_config)
+            
         required_cfg = ['username', 'password']  # , 'owner_org']
         faileds = []
         for req in required_cfg:
@@ -118,7 +127,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         logger.info('Iter files')
         
         # ver si la config me pide sobreescribir metadatos en los datasets de cada archivo
-        override = self.source_config.get('override', None)
+        override = self.source_config.get('override', {})
         logger.info("General override {}".format(override))
             
         for qf in self.siu_data_lib.query_files:
