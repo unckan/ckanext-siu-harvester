@@ -76,7 +76,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             response = requests.get(config_from_url)
             update_config = response.json()
             config_obj.update(update_config)
-            
+
         required_cfg = ['username', 'password']  # , 'owner_org']
         faileds = []
         for req in required_cfg:
@@ -101,6 +101,15 @@ class SIUTransparenciaHarvester(HarvesterBase):
         # basic things you'll need
         self.source = harvest_job.source
         self.source_config = json.loads(self.source.config)
+
+        # allow to get config from URL
+        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        config_from_url = self.source_config.get('from_url', None)
+        if config_from_url is not None:
+            logger.info('Updating config from URL')
+            response = requests.get(config_from_url)
+            update_config = response.json()
+            self.source_config.update(update_config)
 
         self.siu_data_lib.base_url = self.source.url
         self.siu_data_lib.username = self.source_config['username']
@@ -169,7 +178,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             tags = override_this.get('tags', [])
             new_tags = []
             for tag in tags:
-                logger.info("Override tag found {}".format(tag))
+                logger.info("Override tag found {}".format(unicode(tag).encode("utf-8")))
                 new_tags.append({"name": tag})
             
             if len(new_tags) > 0:
@@ -267,13 +276,20 @@ class SIUTransparenciaHarvester(HarvesterBase):
                 if str(e).find('already in use') > 0:
                     action = 'update'
                 else:
-                    msg = 'Import error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
+                    msg = 'Import CREATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
                     harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
                     harvest_object_error.save()
                     return False
 
         if action == 'update':
-            pkg = p.toolkit.get_action('package_update')(context, package_dict)
+            try:
+                pkg = p.toolkit.get_action('package_update')(context, package_dict)
+            except Exception, e:
+                msg = 'Import UPDATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
+                harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
+                harvest_object_error.save()
+                logger.error(msg)
+                return False
         
         if action not in ['create', 'update']:
             raise Exception('Unexpected action {}'.format(action))
