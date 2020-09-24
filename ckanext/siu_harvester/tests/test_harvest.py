@@ -95,7 +95,7 @@ class TestSIUHarvester(object):
         return datasets
 
     # TODO hay problemas con este cassete 
-    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette.yaml', 
+    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette_01.yaml', 
                       ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
     def test_source_results(self):
         """ harvest waf1/ folder as waf source """
@@ -120,3 +120,63 @@ class TestSIUHarvester(object):
 
         for dataset in datasets:
             log.info('Dataset {}'.format(dataset.name))
+    
+
+    @vcr.use_cassette('ckanext/siu_harvester/tests/test_cassette_02.yaml', 
+                      ignore_hosts=['solr', 'ckan', '127.0.0.1', 'localhost'])
+    def test_source_results(self):
+        """ harvest waf1/ folder as waf source """
+
+        url = 'http://wichi.siu.edu.ar/pentaho/plugin/cda/api/doQuery'
+        # limit to some files only
+        
+        cfg = {
+            "username": "usuario_transparencia",
+            "password": "clave_transparencia",
+            "only_files": ['4-RRHH-tablero_18.json'],
+            "override": {
+                "4-RRHH-tablero_18.json": {
+                    "extras": {
+                        "my_custom_extra": "999",
+                        "dataset_preview": {
+                            "chart": {
+                                "height": "250",
+                                "chart_type": "Column",
+                                "chart_color": "#30AA71",
+                                "fields": "['fuente_financiamiento' ,'total_devengado']", 
+                                }
+                            }
+                        },
+                    "notes": "Nueva descripcion",
+                    "tags": ["nuevo_tag_09", "nuevo_tag_12"],
+                    "groups": ["group_01", "group_02"]
+                    }
+               }
+            }
+        self.config1 = json.dumps(cfg)
+        log.info('Final config {}'.format(self.config1))
+
+        self.run_gather(url=url, source_config=self.config1)
+
+        assert_equal(len(self.job.gather_errors), 0)
+        self.run_fetch()
+        datasets = self.run_import()
+
+        assert_equal(len(datasets), 13)
+
+        for dataset in datasets:
+            log.info('Dataset {}'.format(dataset.name))
+            assert_equal(dataset.notes, "Nueva descripcion")
+            
+            pkg_dict = dataset.as_dict()
+            assert_in("nuevo_tag_09", pkg_dict['tags'])
+            assert_in("nuevo_tag_12", pkg_dict['tags'])
+            
+            extras = pkg_dict['extras']
+            assert_in("dataset_preview", extras.keys())
+            assert_in("my_custom_extra", extras.keys())
+            assert_equal(extras['my_custom_extra'], "999")
+
+            assert_in("group_01", pkg_dict['groups'])
+            assert_in("group_02", pkg_dict['groups'])
+            

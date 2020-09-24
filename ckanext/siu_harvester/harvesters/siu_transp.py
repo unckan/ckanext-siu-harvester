@@ -67,6 +67,15 @@ class SIUTransparenciaHarvester(HarvesterBase):
             config_obj = json.loads(config)
         except ValueError as e:
             raise e
+        
+        # allow to get config from URL
+        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        config_from_url = config_obj.get('from_url', None)
+        if config_from_url is not None:
+            logger.info('Updating config from URL')
+            response = requests.get(config_from_url)
+            update_config = response.json()
+            config_obj.update(update_config)
 
         required_cfg = ['username', 'password']  # , 'owner_org']
         faileds = []
@@ -93,6 +102,15 @@ class SIUTransparenciaHarvester(HarvesterBase):
         self.source = harvest_job.source
         self.source_config = json.loads(self.source.config)
 
+        # allow to get config from URL
+        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        config_from_url = self.source_config.get('from_url', None)
+        if config_from_url is not None:
+            logger.info('Updating config from URL')
+            response = requests.get(config_from_url)
+            update_config = response.json()
+            self.source_config.update(update_config)
+
         self.siu_data_lib.base_url = self.source.url
         self.siu_data_lib.username = self.source_config['username']
         self.siu_data_lib.password = self.source_config['password']
@@ -117,12 +135,16 @@ class SIUTransparenciaHarvester(HarvesterBase):
         report = []  # resumen de todos los resultados
         logger.info('Iter files')
         
+        # ver si la config me pide sobreescribir metadatos en los datasets de cada archivo
+        override = self.source_config.get('override', {})
+        logger.info("General override {}".format(override))
+            
         for qf in self.siu_data_lib.query_files:
             only_files = self.source_config.get('only_files', None)
+            query_file_name = qf.split('/')[-1]
             if only_files is not None:
-                fname = qf.split('/')[-1]
-                if fname not in only_files:
-                    logger.info('Skipping file by config {}'.format(fname))
+                if query_file_name not in only_files:
+                    logger.info('Skipping file by config {}'.format(query_file_name))
                     continue
             
             logger.info('Gather SIU Transp FILE {}'.format(qf))
@@ -135,6 +157,52 @@ class SIUTransparenciaHarvester(HarvesterBase):
                 hgerr = HarvestGatherError(message=err, job=harvest_job)
                 hgerr.save()
 
+
+            # ====== Prepare dict to override datasets metadata ============
+            override_this = override.get(query_file_name, {})
+            logger.info("To override {}: {}".format(query_file_name, override_this))
+            
+            # extras need to be {"key": "extra name", "value": "extra value"}
+            extras = override_this.get('extras', {})
+            new_extras = []
+            for extra_key, extra_value in extras.iteritems():
+                logger.info("Override extra found {}: {}".format(extra_key, extra_value))
+                if not isinstance(extra_value, str):
+                    extra_value = str(extra_value)
+                new_extras.append({"key": extra_key, "value": extra_value})
+            
+            if len(new_extras) > 0:
+                override_this['extras'] = new_extras
+
+            # tags need to be {"name": "tag name"}
+            tags = override_this.get('tags', [])
+            new_tags = []
+            for tag in tags:
+                logger.info("Override tag found {}".format(unicode(tag).encode("utf-8")))
+                new_tags.append({"name": tag})
+            
+            if len(new_tags) > 0:
+                override_this['tags'] = new_tags
+
+            # groups need to be {"name": "tag name"}
+            groups = override_this.get('groups', [])
+            new_groups = []
+            for group in groups:
+                logger.info("Override group found {}".format(group))
+                # check if groups must be created
+                context = {'model': model, 'session': model.Session, 'user': self._get_user_name()}
+                try:
+                    p.toolkit.get_action('group_create')(context, {"name": group})
+                except Exception as e:
+                    logger.error('Error creating group (skipped) {}: {}'.format(group, e))
+                    
+                new_groups.append({"name": group})
+            
+            if len(new_groups) > 0:
+                override_this['groups'] = new_groups
+
+            # ================================
+                
             report += stqf.requests
             for dataset in stqf.datasets:
                 if dataset['name'] in prev_names:
@@ -153,6 +221,11 @@ class SIUTransparenciaHarvester(HarvesterBase):
                     'resources': dataset['resources'],
                     'action': action
                 }
+
+                # fix extras if they exists
+                ho_dict.update(override_this)
+                logger.info("Overrided ho_dict {}".format(ho_dict))
+                    
 
                 # Each harvest object will be passed to other stages in harvest process
                 obj = HarvestObject(guid=dataset['name'],
@@ -203,13 +276,20 @@ class SIUTransparenciaHarvester(HarvesterBase):
                 if str(e).find('already in use') > 0:
                     action = 'update'
                 else:
-                    msg = 'Import error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
+                    msg = 'Import CREATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
                     harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
                     harvest_object_error.save()
                     return False
 
         if action == 'update':
-            pkg = p.toolkit.get_action('package_update')(context, package_dict)
+            try:
+                pkg = p.toolkit.get_action('package_update')(context, package_dict)
+            except Exception, e:
+                msg = 'Import UPDATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
+                harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
+                harvest_object_error.save()
+                logger.error(msg)
+                return False
         
         if action not in ['create', 'update']:
             raise Exception('Unexpected action {}'.format(action))

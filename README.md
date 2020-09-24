@@ -88,7 +88,8 @@ Debe elegir la URL de la instancia de la que desea obtener datos
 ### Configuración
 
 Para conectarse es requisito que para cada _harvest source_ definir una configuración.  
-Ejemplo:
+La configuración mínima y bigatoria es solo el usuario y a contraseña del API del portal de 
+transparencia al que este _harvester_ se va a conectar
 
 ```json
 {
@@ -140,15 +141,104 @@ Por ejemplo `egresados-pos-facultad.json`
 De esta forma este _harvester_ va a iterar por los años disponibles y creará un dataset para cada año.  
 Es posible agregar más _queries_ para consumir más datos.
 
+## Configuraciones adicionales
+
+### Limitar los archivos de _queries_ usadas
+
+La [librería siu-data](https://github.com/avdata99/pySIUdata) a la que se conecta este _harvester_ incluye todos los 
+[archivos de consulta disponibles](https://github.com/avdata99/pySIUdata/tree/master/siu_data/queries) 
+(descriptos más abajo).  
+De manera predeterminada todos los archivos se usarán pero es posible limitar los archivos 
+usados en la configuracion con `only_files` de esta forma:  
+
+```js
+"only_files": [
+    "1-PRESUPUESTO-tablero_01.json",
+    "1-PRESUPUESTO-tablero_02.json"
+    ]
+```
+Los archivos a usar se identifican con la propiedad `name` de cada archivo de consulta.
+
+### Sobreescribir configuraciones
+
+Los archivos de consulta permiten definir _tags_, _grupos_ y otros metadatos que cada dataset cosechado va a usar.  
+Es tambien posible configurar cambios desde la configuracion del harvester.  
+Ejemplo:  
+
+```js
+"override": {
+    "1-PRESUPUESTO-tablero_01.json": {
+        "notes": "Esta es una nueva descripcion para todos los datasets cosechados desde este archivo",
+        "tags": ["nuevo_tag_01", "nuevo_tag_02"]
+    },
+    "1-PRESUPUESTO-tablero_02.json": {
+        "tags": ["nuevo_tag_02", "nuevo_tag_03"],
+        "groups": ["group_01", "group_02"]
+    }
+}
+```
+
+### Agregar extras a los datasets
+
+Si se requiere que en cada cosecha (además de los tags, grupos, notas, etc) se agreguen más 
+metadatos a los datasets cosechados 
+
+```js
+"override": {
+    "4-RRHH-tablero_18.json": {
+
+        "extras": {
+            "my_custom_extra": "999",
+            "dataset_preview": {
+                "chart": {
+                    "height": "250",
+                    "chart_type": "Column",
+                    "chart_color": "#30AA71",
+                    "fields": "['Facultad', 'cantidad de empleados']", 
+            
+                }
+            }
+        },
+
+        "notes": "Nueva descripcion",
+        "tags": ["nuevo_tag_09", "nuevo_tag_12"]
+    }
+}
+```
+
+## Ejemplo configuracion final
+
+```json
+{
+"username": "usuario",
+"password": "clave",
+"only_files": ["4-RRHH-tablero_18.json"],
+"override": {
+    "4-RRHH-tablero_18.json": {
+        "extras": {
+            "my_custom_extra": "999",
+            "dataset_preview": {
+                "chart": {
+                    "height": "250",
+                    "chart_type": "Column",
+                    "chart_color": "#30AA71",
+                    "fields": "['fuente_financiamiento' ,'total_devengado']", 
+                    }
+                }
+            },
+        "notes": "Nueva descripcion",
+        "tags": ["nuevo_tag_09", "nuevo_tag_12"],
+        "groups": ["group_01", "group_02"]
+        }
+    }
+}
+```
 ## Tests 
 
 Locally
 
 ```
-docker-compose \
-    -f docker-compose.yml \
-    -f docker-compose-dev.yml \
-    exec ckan bash -c \
+docker-compose exec ckan bash -c \
     "cd src_extensions/ckanext-siu-harvester && \
         nosetests --ckan --nologcapture --with-pylons=test.ini ckanext/siu_harvester/tests"
 ```
