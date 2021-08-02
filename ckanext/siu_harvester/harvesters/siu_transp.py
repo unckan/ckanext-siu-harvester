@@ -157,7 +157,6 @@ class SIUTransparenciaHarvester(HarvesterBase):
                 hgerr = HarvestGatherError(message=err, job=harvest_job)
                 hgerr.save()
 
-
             # ====== Prepare dict to override datasets metadata ============
             override_this = override.get(query_file_name, {})
             logger.info("To override {}: {}".format(query_file_name, override_this))
@@ -165,7 +164,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             # extras need to be {"key": "extra name", "value": "extra value"}
             extras = override_this.get('extras', {})
             new_extras = []
-            for extra_key, extra_value in extras.iteritems():
+            for extra_key, extra_value in extras.items():
                 logger.info("Override extra found {}: {}".format(extra_key, extra_value))
                 if not isinstance(extra_value, str):
                     extra_value = str(extra_value)
@@ -270,7 +269,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         if action == 'create':
             try:
                 pkg = p.toolkit.get_action('package_create')(context, package_dict)
-            except Exception, e:
+            except Exception as e:
                 logger.error('Error creating package {}: {}'.format(str(e), package_dict))
                 # TODO, no debería suceder
                 if str(e).find('already in use') > 0:
@@ -284,7 +283,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         if action == 'update':
             try:
                 pkg = p.toolkit.get_action('package_update')(context, package_dict)
-            except Exception, e:
+            except Exception as e:
                 msg = 'Import UPDATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
                 harvest_object_error = HarvestObjectError(message=msg, object=harvest_object)
                 harvest_object_error.save()
@@ -329,7 +328,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         fn = p.toolkit.get_action('resource_create')
         try:
             res = fn(context, resource)
-        except Exception, e:
+        except Exception as e:
             logger.error('Error creating resource {} {}'.format(resource, e))
             raise
         
