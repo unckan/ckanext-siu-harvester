@@ -233,6 +233,11 @@ metadatos a los datasets cosechados
     }
 }
 ```
+
+Es posible definir la configuración de cada fuente de datos a un recurso externo con el paramertro `from_url`.  
+[Aquí](https://github.com/avdata99/ckan-env/blob/develop/docs/full_config.json) un ejemplo de una configuración completa.  
+
+
 ## Tests 
 
 Locally
