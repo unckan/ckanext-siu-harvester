@@ -1,2 +1,2 @@
 requests>=2.23.0
-siu-data>=0.2.16
+siu-data>=0.3.5

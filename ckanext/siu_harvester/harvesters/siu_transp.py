@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 import json
 import logging
 import os
 import requests
-from werkzeug.datastructures import FileStorage
+from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 from siu_data.portal_data import SIUPoratlTransparenciaData
 from siu_data.query_file import SIUTranspQueryFile
@@ -177,7 +176,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             tags = override_this.get('tags', [])
             new_tags = []
             for tag in tags:
-                logger.info("Override tag found {}".format(unicode(tag).encode("utf-8")))
+                logger.info("Override tag found {}".format(tag))
                 new_tags.append({"name": tag})
             
             if len(new_tags) > 0:
@@ -272,7 +271,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             except Exception as e:
                 logger.error('Error creating package {}: {}'.format(str(e), package_dict))
                 # TODO, no debería suceder
-                if str(e).find('already in use') > 0:
+                if 'already in use' in str(e):
                     action = 'update'
                 else:
                     msg = 'Import CREATE error. pkg name: {}. \n\tError: {}'.format(package_dict.get('name', 'unnamed'), e)
@@ -301,7 +300,8 @@ class SIUTransparenciaHarvester(HarvesterBase):
             upload_from = resource.pop('upload')
             
             if os.path.isfile(upload_from):
-                resource['upload'] = FileStorage(filename=upload_from, stream=open(upload_from))
+                logger.info('Preparing fake Resource from {}'.format(upload_from))
+                resource['upload'] = FlaskFileStorage(filename=upload_from, stream=open(upload_from, 'rb'))
                 self.create_resource(context, resource)
             else:
                 logger.error('Resource to upload not found {}'.format(upload_from))
@@ -329,8 +329,8 @@ class SIUTransparenciaHarvester(HarvesterBase):
         try:
             res = fn(context, resource)
         except Exception as e:
-            logger.error('Error creating resource {} {}'.format(resource, e))
-            raise
+            logger.error('Error creating resource: {} :: {}'.format(resource, e))
+            raise e
         
         final_resource = p.toolkit.get_action('resource_show')(context, {'id': res['id']})
         logger.info('Final resource {}'.format(final_resource['name']))
