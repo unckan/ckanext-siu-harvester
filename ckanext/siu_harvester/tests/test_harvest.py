@@ -6,12 +6,8 @@ from ckan import model
 from ckanext.siu_harvester.tests.factories import HarvestJobObj, SIUHarvestSourceObj
 from nose.tools import assert_equal, assert_in, assert_not_in, assert_raises
 
-try:
-    from ckan.tests.helpers import reset_db, call_action
-    from ckan.tests.factories import Organization, Group, _get_action_user_name, Sysadmin
-except ImportError:
-    from ckan.new_tests.helpers import reset_db, call_action
-    from ckan.new_tests.factories import Organization, Group, _get_action_user_name, Sysadmin
+from ckan.tests.helpers import reset_db, call_action
+from ckan.tests.factories import Organization, Group, _get_action_user_name, Sysadmin
 
 from ckanext.siu_harvester.harvesters.siu_transp import SIUTransparenciaHarvester
 
