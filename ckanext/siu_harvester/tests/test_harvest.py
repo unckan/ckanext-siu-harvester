@@ -3,7 +3,7 @@ import logging
 import vcr
 import ckanext.harvest.model as harvest_model
 from ckan import model
-from factories import HarvestJobObj, SIUHarvestSourceObj
+from ckanext.siu_harvester.tests.factories import HarvestJobObj, SIUHarvestSourceObj
 from nose.tools import assert_equal, assert_in, assert_not_in, assert_raises
 
 try:

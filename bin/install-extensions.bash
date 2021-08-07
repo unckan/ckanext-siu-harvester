@@ -1,7 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-pip install pytest-ckan
 pip install setuptools-rust
 
 git clone https://github.com/ckan/ckanext-harvest
