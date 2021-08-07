@@ -1,18 +1,17 @@
 import json
 import logging
 import vcr
-import ckanext.harvest.model as harvest_model
+
 from ckan import model
-from ckanext.siu_harvester.tests.factories import HarvestJobObj, SIUHarvestSourceObj
-from nose.tools import assert_equal, assert_in, assert_not_in, assert_raises
-
 from ckan.tests.helpers import reset_db, call_action
-from ckan.tests.factories import Organization, Group, _get_action_user_name, Sysadmin
-
+from ckan.tests.factories import Sysadmin
+import ckanext.harvest.model as harvest_model
 from ckanext.siu_harvester.harvesters.siu_transp import SIUTransparenciaHarvester
+from ckanext.siu_harvester.tests.factories import HarvestJobObj, SIUHarvestSourceObj
 
 
 log = logging.getLogger(__name__)
+
 
 class TestSIUHarvester(object):
 
@@ -24,8 +23,8 @@ class TestSIUHarvester(object):
     def setup(cls):
         reset_db()
         harvest_model.setup()
-        sysadmin = Sysadmin(name='dummy')
-        user_name = sysadmin['name'].encode('ascii')
+        sysadmin = Sysadmin()
+        user_name = sysadmin['name']
         call_action('organization_create',
                     context={'user': user_name},
                     name='test-org')
@@ -108,11 +107,11 @@ class TestSIUHarvester(object):
         
         self.run_gather(url=url, source_config=self.config1)
 
-        assert_equal(len(self.job.gather_errors), 0)
+        assert len(self.job.gather_errors) == 0
         self.run_fetch()
         datasets = self.run_import()
 
-        assert_equal(len(datasets), 16)
+        assert len(datasets) == 16
 
         for dataset in datasets:
             log.info('Dataset {}'.format(dataset.name))
@@ -154,25 +153,25 @@ class TestSIUHarvester(object):
 
         self.run_gather(url=url, source_config=self.config1)
 
-        assert_equal(len(self.job.gather_errors), 0)
+        assert len(self.job.gather_errors) == 0
         self.run_fetch()
         datasets = self.run_import()
 
-        assert_equal(len(datasets), 13)
+        assert len(datasets) == 13
 
         for dataset in datasets:
             log.info('Dataset {}'.format(dataset.name))
-            assert_equal(dataset.notes, "Nueva descripcion")
+            assert dataset.notes == "Nueva descripcion"
             
             pkg_dict = dataset.as_dict()
-            assert_in("nuevo_tag_09", pkg_dict['tags'])
-            assert_in("nuevo_tag_12", pkg_dict['tags'])
+            assert "nuevo_tag_09" in pkg_dict['tags']
+            assert "nuevo_tag_12" in pkg_dict['tags']
             
             extras = pkg_dict['extras']
-            assert_in("dataset_preview", extras.keys())
-            assert_in("my_custom_extra", extras.keys())
-            assert_equal(extras['my_custom_extra'], "999")
+            assert "dataset_preview" in extras.keys()
+            assert "my_custom_extra" in extras.keys()
+            assert extras['my_custom_extra'] == "999"
 
-            assert_in("group_01", pkg_dict['groups'])
-            assert_in("group_02", pkg_dict['groups'])
+            assert "group_01" in pkg_dict['groups']
+            assert "group_02" in pkg_dict['groups']
             
