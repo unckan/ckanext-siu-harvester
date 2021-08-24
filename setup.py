@@ -12,14 +12,14 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='0.3.3',
+    version='0.3.4',
 
     description='''SIU Harvest''',
     long_description=long_description,
     long_description_content_type='text/markdown', 
     
     # The project's main homepage.
-    url='https://github.com/avdata99/ckanext-siu-harvester',
+    url='https://github.com/unckan/ckanext-siu-harvester',
 
     # Author details
     author='''Andres Vazquez''',

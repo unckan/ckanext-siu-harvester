@@ -68,7 +68,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
             raise e
         
         # allow to get config from URL
-        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        # Sample: https://raw.githubusercontent.com/unckan/ckan-env/develop/docs/full_config.json
         config_from_url = config_obj.get('from_url', None)
         if config_from_url is not None:
             logger.info('Updating config from URL')
@@ -102,7 +102,7 @@ class SIUTransparenciaHarvester(HarvesterBase):
         self.source_config = json.loads(self.source.config)
 
         # allow to get config from URL
-        # Sample: https://raw.githubusercontent.com/avdata99/ckan-env/develop/docs/full_config.json
+        # Sample: https://raw.githubusercontent.com/unckan/ckan-env/develop/docs/full_config.json
         config_from_url = self.source_config.get('from_url', None)
         if config_from_url is not None:
             logger.info('Updating config from URL')

@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/avdata99/ckanext-siu-harvester.svg?branch=master)](https://travis-ci.org/avdata99/ckanext-siu-harvester)
 [![Docker Pulls](https://img.shields.io/docker/pulls/avdata99/ckan-env.svg)](https://hub.docker.com/r/avdata99/ckan-env/tags)
 [![Docker Automated](https://img.shields.io/docker/automated/avdata99/ckan-env.svg)](https://hub.docker.com/r/avdata99/ckan-env/tags)
 [![](https://img.shields.io/pypi/implementation/ckanext-siu-harvester)](https://pypi.org/project/ckanext-siu-harvester/)
@@ -59,7 +58,7 @@ Los archivos CDA incluidos en el Portal de Transparencia ya están cubiertos
 en este harvester. Esta listo para consumir y republicar datos.
 
 Es posible tambien definir archivos CDA personalizados y 
-[agregarlos al harvester](https://github.com/avdata99/ckanext-siu-harvester/issues/20)
+[agregarlos al harvester](https://github.com/unckan/ckanext-siu-harvester/issues/20)
 para consumir estos datos de manera automtizada y periódicamente.
 
 ### Instalación
@@ -69,10 +68,10 @@ Disponible en [Pypi](https://pypi.org/project/ckanext-siu-harvester/) o vía Git
 ```
 pip install ckanext-siu-harvester
 ó
-pip install -e git+https://github.com/avdata99/ckanext-siu-harvester.git#egg=ckanext-siu-harvester
+pip install -e git+https://github.com/unckan/ckanext-siu-harvester.git#egg=ckanext-siu-harvester
 
 +
-pip install -r https://raw.githubusercontent.com/avdata99/ckanext-siu-harvester/master/requirements.txt
+pip install -r https://raw.githubusercontent.com/unckan/ckanext-siu-harvester/master/requirements.txt
 
 ```
 
@@ -145,8 +144,8 @@ Es posible agregar más _queries_ para consumir más datos.
 
 ### Limitar los archivos de _queries_ usadas
 
-La [librería siu-data](https://github.com/avdata99/pySIUdata) a la que se conecta este _harvester_ incluye todos los 
-[archivos de consulta disponibles](https://github.com/avdata99/pySIUdata/tree/master/siu_data/queries) 
+La [librería siu-data](https://github.com/unckan/pySIUdata) a la que se conecta este _harvester_ incluye todos los 
+[archivos de consulta disponibles](https://github.com/unckan/pySIUdata/tree/master/siu_data/queries) 
 (descriptos más abajo).  
 De manera predeterminada todos los archivos se usarán pero es posible limitar los archivos 
 usados en la configuracion con `only_files` de esta forma:  
@@ -235,7 +234,7 @@ metadatos a los datasets cosechados
 ```
 
 Es posible definir la configuración de cada fuente de datos a un recurso externo con el paramertro `from_url`.  
-[Aquí](https://github.com/avdata99/ckan-env/blob/develop/docs/full_config.json) un ejemplo de una configuración completa.  
+[Aquí](https://github.com/unckan/ckan-env/blob/develop/docs/full_config.json) un ejemplo de una configuración completa.  
 
 
 ## Tests 
